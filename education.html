@@ -91,6 +91,25 @@
       "25-26-2": { start: "2026-03-09", weeks: 16 }
     };
 
+    // 国家法定节假日默认排除。如学校另有校历安排，可在此处增删日期或日期段。
+    const HOLIDAY_RANGES = [
+      ["2025-01-01", "2025-01-01"],
+      ["2025-01-28", "2025-02-04"],
+      ["2025-04-04", "2025-04-06"],
+      ["2025-05-01", "2025-05-05"],
+      ["2025-05-31", "2025-06-02"],
+      ["2025-10-01", "2025-10-08"],
+      ["2026-01-01", "2026-01-03"],
+      ["2026-02-15", "2026-02-23"],
+      ["2026-04-04", "2026-04-06"],
+      ["2026-05-01", "2026-05-05"],
+      ["2026-06-19", "2026-06-21"],
+      ["2026-09-25", "2026-09-27"],
+      ["2026-10-01", "2026-10-07"]
+    ];
+
+    const HOLIDAY_DATES = new Set(expandDateRanges(HOLIDAY_RANGES));
+
     const WEEKDAYS = {1:"周一",2:"周二",3:"周三",4:"周四",5:"周五",6:"周六",7:"周日"};
     const EDUCATION_ITEMS = [
       { month: "2025-09", content: "设备操作", firstLesson: true },
@@ -138,7 +157,7 @@
         generatedRows = generateEducationRows(classRows, getExtraTeacherNames());
         renderPages();
         restorePeopleCounts();
-        setStatus(`已生成${generatedRows.length}条安全教育记录。按“每位教师每个指定月份1条”生成；9月和3月取该教师开学第一课，11月和5月取该教师当月实际上课日并尽量错开。`, "ok");
+        setStatus(`已生成${generatedRows.length}条安全教育记录。已排除国家法定节假日；按“每位教师每个指定月份1条”生成；9月和3月取该教师开学第一课，11月和5月取该教师当月实际上课日并尽量错开。`, "ok");
       }catch(error){
         setStatus(error.message || String(error), "err");
       }
@@ -190,6 +209,7 @@
           rule.weekdays.forEach(day => {
             const offset = (week - 1) * 7 + (day - 1);
             const date = formatDate(addDays(rule.startDate, offset));
+            if(isHolidayDate(date)) return;
             const key = [date, rule.teacher, rule.course, rule.className, rule.periods].join("|");
             map.set(key, {
               date,
@@ -310,10 +330,28 @@
       let date = new Date(base + "T00:00:00");
       while(result.length < 10 && formatDate(date).slice(0,7) === month){
         const day = date.getDay();
-        if(day !== 0 && day !== 6) result.push(formatDate(date));
+        const value = formatDate(date);
+        if(day !== 0 && day !== 6 && !isHolidayDate(value)) result.push(value);
         date.setDate(date.getDate() + 1);
       }
       return result.length ? result : [base];
+    }
+
+    function isHolidayDate(dateString){
+      return HOLIDAY_DATES.has(dateString);
+    }
+
+    function expandDateRanges(ranges){
+      const dates = [];
+      ranges.forEach(([start, end]) => {
+        let d = new Date(start + "T00:00:00");
+        const last = new Date(end + "T00:00:00");
+        while(d <= last){
+          dates.push(formatDate(d));
+          d.setDate(d.getDate() + 1);
+        }
+      });
+      return dates;
     }
 
     function compareClassRow(a,b){

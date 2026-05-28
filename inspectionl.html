@@ -100,12 +100,19 @@
 
     // 国家法定节假日默认排除。如学校另有校历安排，可在此处增删日期或日期段。
     const HOLIDAY_RANGES = [
+      ["2025-01-01", "2025-01-01"],
+      ["2025-01-28", "2025-02-04"],
+      ["2025-04-04", "2025-04-06"],
+      ["2025-05-01", "2025-05-05"],
+      ["2025-05-31", "2025-06-02"],
       ["2025-10-01", "2025-10-08"],
       ["2026-01-01", "2026-01-03"],
       ["2026-02-15", "2026-02-23"],
       ["2026-04-04", "2026-04-06"],
       ["2026-05-01", "2026-05-05"],
-      ["2026-06-19", "2026-06-21"]
+      ["2026-06-19", "2026-06-21"],
+      ["2026-09-25", "2026-09-27"],
+      ["2026-10-01", "2026-10-07"]
     ];
 
     const HOLIDAY_DATES = new Set(expandDateRanges(HOLIDAY_RANGES));
@@ -147,7 +154,7 @@
         const classRows = expandClassRows(rules);
         generatedRows = generateInspectionRows(classRows, getExtraInspectorNames());
         renderPages();
-        setStatus(`已生成${generatedRows.length}条安全检查记录。已排除寒暑假、非教学期间和法定节假日，日期优先取教师实际上课日期，并尽量错开不同教师检查日期。`, "ok");
+        setStatus(`已生成${generatedRows.length}条安全检查记录。已排除寒暑假、非教学期间和国家法定节假日，日期优先取教师实际上课日期，并尽量错开不同教师检查日期。`, "ok");
       }catch(error){
         setStatus(error.message || String(error), "err");
       }
