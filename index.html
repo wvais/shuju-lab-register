@@ -304,11 +304,11 @@
         </div>
         <div>
           <label for="className">使用班级</label>
-          <input id="className" placeholder="例如：2025级护理1班" />
+          <input id="className" placeholder="例如：23级大数据1班" />
         </div>
         <div>
           <label for="signName">登记人签字</label>
-          <input id="signName" placeholder="可与教师姓名一致，也可留空" />
+          <input id="signName" placeholder="与教师姓名一致，也可留空" />
         </div>
 
         <div class="wide">
@@ -387,7 +387,7 @@
         <button class="danger" onclick="clearAll()">清空本机台账</button>
       </div>
       <div class="hint">
-        说明：实验室名称固定为“数聚实验室”。课后安全收尾情况固定为“收尾正常”。默认将2025年9月—2026年1月设置为18周，第1周周一为2025-09-01；将2026年3月—2026年6月设置为16周，第1周周一为2026-03-09。若学校校历不同，直接修改“第1周周一日期”即可。
+        V
       </div>
     </section>
 
@@ -398,7 +398,7 @@
       <input id="ghBranch" type="hidden" value="main" />
       <input id="ghPath" type="hidden" value="data/shuju-lab-usage.json" />
       <div class="hint" style="margin-bottom:10px;">
-        本网页已固定同步到：Owner=<b id="ghOwnerDisplay">YOUR_GITHUB_USERNAME</b>，Repo=<b>shuju-lab-register</b>，Branch=<b>main</b>，Path=<b>data/shuju-lab-usage.json</b>。老师只需要填写 Token。
+        v
       </div>
       <div class="form-grid">
         <div class="wide">
@@ -424,7 +424,7 @@
         <button class="ok" onclick="syncToGithub()">合并保存到GitHub总台账</button>
       </div>
       <div class="hint">
-        该页面是纯静态HTML。GitHub不允许匿名用户直接写入仓库，因此需要Token。不要把Token直接写进网页源码，也不要提交到公开仓库。正式长期使用时，建议后续改为服务端中转，避免把Token分发给多人。
+        v
       </div>
       <div id="cloudStatus" class="status">未连接GitHub。</div>
     </section>
