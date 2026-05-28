@@ -1,0 +1,1098 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>数聚实验室使用情况登记台账</title>
+  <style>
+    :root {
+      --border: #111;
+      --bg: #f6f7f9;
+      --card: #fff;
+      --text: #111;
+      --muted: #666;
+      --primary: #1f4e79;
+      --ok: #1f7a3f;
+      --warn: #9a6700;
+      --danger: #9b1c1c;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Microsoft YaHei", "SimSun", Arial, sans-serif;
+      color: var(--text);
+      background: var(--bg);
+    }
+
+    .page {
+      max-width: 1320px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    .panel {
+      background: var(--card);
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      padding: 18px;
+      margin-bottom: 18px;
+      box-shadow: 0 3px 12px rgba(0, 0, 0, 0.04);
+    }
+
+    .panel h2 {
+      margin: 0 0 14px;
+      font-size: 20px;
+      color: var(--primary);
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(180px, 1fr));
+      gap: 12px 14px;
+    }
+
+    label {
+      display: block;
+      font-size: 14px;
+      margin-bottom: 5px;
+      color: #222;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      height: 38px;
+      border: 1px solid #bbb;
+      border-radius: 6px;
+      padding: 7px 9px;
+      font-family: inherit;
+      font-size: 14px;
+      background: #fff;
+    }
+
+    textarea {
+      height: 76px;
+      resize: vertical;
+    }
+
+    .wide { grid-column: span 2; }
+    .full { grid-column: 1 / -1; }
+
+    .fixed-value {
+      height: 38px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      padding: 8px 9px;
+      background: #f8f8f8;
+      font-size: 14px;
+      color: #222;
+    }
+
+    .checks {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 14px;
+      min-height: 38px;
+      align-items: center;
+      padding: 6px 0;
+    }
+
+    .checks label {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      margin: 0;
+      white-space: nowrap;
+    }
+
+    .checks input {
+      width: auto;
+      height: auto;
+    }
+
+    .btn-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 16px;
+    }
+
+    button {
+      border: 0;
+      border-radius: 7px;
+      padding: 9px 14px;
+      font-family: inherit;
+      font-size: 14px;
+      cursor: pointer;
+      background: var(--primary);
+      color: #fff;
+    }
+
+    button.secondary { background: #666; }
+    button.danger { background: var(--danger); }
+    button.ok { background: var(--ok); }
+    button.light { background: #e9eef5; color: #111; border: 1px solid #c8d2df; }
+    button:disabled { opacity: 0.55; cursor: not-allowed; }
+
+    .hint {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.7;
+      margin-top: 8px;
+    }
+
+    .status {
+      margin-top: 10px;
+      padding: 9px 10px;
+      border-radius: 6px;
+      background: #f4f6f8;
+      color: #333;
+      font-size: 13px;
+      line-height: 1.6;
+      min-height: 36px;
+    }
+
+    .status.ok { background: #eef8f1; color: var(--ok); }
+    .status.warn { background: #fff7e6; color: var(--warn); }
+    .status.error { background: #fff0f0; color: var(--danger); }
+
+    .toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 10px;
+    }
+
+    .summary {
+      color: #333;
+      font-size: 14px;
+    }
+
+    .table-wrap {
+      background: #fff;
+      overflow-x: auto;
+      border: 1px solid var(--border);
+    }
+
+    table.register {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+      background: #fff;
+    }
+
+    .register th,
+    .register td {
+      border: 1px solid var(--border);
+      text-align: center;
+      vertical-align: middle;
+      padding: 5px 4px;
+      font-size: 13px;
+      line-height: 1.35;
+      word-break: break-all;
+      min-height: 36px;
+    }
+
+    .register .title-row th {
+      font-size: 24px;
+      font-weight: 700;
+      padding: 8px 0;
+      border-left: 0;
+      border-right: 0;
+    }
+
+    .register .lab-row td {
+      height: 34px;
+      text-align: left;
+      padding-left: 8px;
+    }
+
+    .register .head-row th {
+      background: #f1f1f1;
+      font-weight: 600;
+      height: 48px;
+    }
+
+    .register tbody td { height: 40px; }
+
+    .col-no { width: 46px; }
+    .col-date { width: 82px; }
+    .col-time { width: 98px; }
+    .col-class { width: 110px; }
+    .col-course { width: 130px; }
+    .col-teacher { width: 105px; }
+    .col-device { width: 130px; }
+    .col-safe { width: 115px; }
+    .col-close { width: 105px; }
+    .col-sign { width: 120px; }
+
+    .records {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+
+    .records th,
+    .records td {
+      border: 1px solid #ddd;
+      padding: 7px;
+      font-size: 13px;
+      text-align: center;
+    }
+
+    .records th { background: #f3f6fa; }
+
+    @media print {
+      body { background: #fff; }
+      .page { max-width: none; padding: 0; }
+      .panel, .toolbar, .records-panel { display: none !important; }
+      .table-wrap { border: none; overflow: visible; }
+      table.register { width: 100%; page-break-inside: auto; }
+      .register tr { page-break-inside: avoid; page-break-after: auto; }
+      .register th, .register td { font-size: 12px; }
+      .register .title-row th { font-size: 22px; }
+      @page { size: A4 landscape; margin: 10mm; }
+    }
+
+    @media (max-width: 980px) {
+      .form-grid { grid-template-columns: repeat(2, minmax(160px, 1fr)); }
+      .wide { grid-column: span 2; }
+    }
+
+    @media (max-width: 560px) {
+      .page { padding: 12px; }
+      .form-grid { grid-template-columns: 1fr; }
+      .wide, .full { grid-column: 1; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <section class="panel">
+      <h2>课程使用信息录入</h2>
+      <div class="form-grid">
+        <div>
+          <label>实验室名称</label>
+          <div class="fixed-value">数聚实验室</div>
+        </div>
+        <div>
+          <label for="term">学期</label>
+          <select id="term" onchange="syncTerm()">
+            <option value="fall2025">2025年9月—2026年1月（18周）</option>
+            <option value="spring2026">2026年3月—2026年6月（16周）</option>
+          </select>
+        </div>
+        <div>
+          <label for="startDate">第1周周一日期</label>
+          <input id="startDate" type="date" value="2025-09-01" />
+        </div>
+        <div>
+          <label for="maxWeek">总周数</label>
+          <input id="maxWeek" type="number" value="18" min="1" max="30" />
+        </div>
+
+        <div>
+          <label for="teacher">负责教师</label>
+          <input id="teacher" placeholder="请输入教师姓名" />
+        </div>
+        <div>
+          <label for="course">课程名称</label>
+          <input id="course" placeholder="请输入课程名称" />
+        </div>
+        <div>
+          <label for="className">使用班级</label>
+          <input id="className" placeholder="例如：2025级护理1班" />
+        </div>
+        <div>
+          <label for="signName">登记人签字</label>
+          <input id="signName" placeholder="可与教师姓名一致，也可留空" />
+        </div>
+
+        <div class="wide">
+          <label>上课星期</label>
+          <div class="checks" id="weekdayChecks">
+            <label><input type="checkbox" value="1">周一</label>
+            <label><input type="checkbox" value="2">周二</label>
+            <label><input type="checkbox" value="3">周三</label>
+            <label><input type="checkbox" value="4">周四</label>
+            <label><input type="checkbox" value="5">周五</label>
+            <label><input type="checkbox" value="6">周六</label>
+            <label><input type="checkbox" value="7">周日</label>
+          </div>
+        </div>
+        <div>
+          <label for="periods">上课节次/时段</label>
+          <input id="periods" placeholder="例如：1-2节 / 3-4节 / 8:30-10:05" />
+        </div>
+        <div>
+          <label for="weekMode">周次类型</label>
+          <select id="weekMode">
+            <option value="all">每周</option>
+            <option value="odd">单周</option>
+            <option value="even">双周</option>
+            <option value="custom">自定义周次</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="weekStart">开始周</label>
+          <input id="weekStart" type="number" value="1" min="1" />
+        </div>
+        <div>
+          <label for="weekEnd">结束周</label>
+          <input id="weekEnd" type="number" value="18" min="1" />
+        </div>
+        <div class="wide">
+          <label for="customWeeks">自定义周次</label>
+          <input id="customWeeks" placeholder="仅选择“自定义周次”时填写，如：1,3,5,8-12,16" />
+        </div>
+
+        <div>
+          <label for="deviceStatus">设备、用电运行状态</label>
+          <select id="deviceStatus">
+            <option value="正常">正常</option>
+            <option value="异常，已报修">异常，已报修</option>
+            <option value="">留空</option>
+          </select>
+        </div>
+        <div>
+          <label for="safetyStatus">有无安全异常</label>
+          <select id="safetyStatus">
+            <option value="无">无</option>
+            <option value="有，已处置">有，已处置</option>
+            <option value="">留空</option>
+          </select>
+        </div>
+        <div>
+          <label>课后安全收尾情况</label>
+          <div class="fixed-value">收尾正常</div>
+        </div>
+        <div>
+          <label>&nbsp;</label>
+          <div class="checks">
+            <label><input id="autoSync" type="checkbox">添加后自动合并保存到GitHub</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <button onclick="addSchedule()">添加到台账</button>
+        <button class="ok" onclick="addScheduleAndSync()">添加并保存到GitHub总台账</button>
+        <button class="light" onclick="clearForm()">清空本次录入</button>
+        <button class="secondary" onclick="saveData()">保存到本机</button>
+        <button class="secondary" onclick="loadData()">读取本机保存</button>
+        <button class="danger" onclick="clearAll()">清空本机台账</button>
+      </div>
+      <div class="hint">
+        说明：实验室名称固定为“数聚实验室”。课后安全收尾情况固定为“收尾正常”。默认将2025年9月—2026年1月设置为18周，第1周周一为2025-09-01；将2026年3月—2026年6月设置为16周，第1周周一为2026-03-02。若学校校历不同，直接修改“第1周周一日期”即可。
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>GitHub总台账同步设置</h2>
+      <input id="ghOwner" type="hidden" value="YOUR_GITHUB_USERNAME" />
+      <input id="ghRepo" type="hidden" value="shuju-lab-register" />
+      <input id="ghBranch" type="hidden" value="main" />
+      <input id="ghPath" type="hidden" value="data/shuju-lab-usage.json" />
+      <div class="hint" style="margin-bottom:10px;">
+        本网页已固定同步到：Owner=<b id="ghOwnerDisplay">YOUR_GITHUB_USERNAME</b>，Repo=<b>shuju-lab-register</b>，Branch=<b>main</b>，Path=<b>data/shuju-lab-usage.json</b>。老师只需要填写 Token。
+      </div>
+      <div class="form-grid">
+        <div class="wide">
+          <label for="ghToken">GitHub Token</label>
+          <input id="ghToken" type="password" placeholder="由管理员提供，只在本机浏览器输入" />
+        </div>
+        <div>
+          <label>&nbsp;</label>
+          <div class="checks">
+            <label><input id="rememberToken" type="checkbox">仅在本机记住Token</label>
+          </div>
+        </div>
+        <div>
+          <label>&nbsp;</label>
+          <div class="checks">
+            <label><input id="mergeRemoteFirst" type="checkbox" checked>保存前先合并云端数据</label>
+          </div>
+        </div>
+      </div>
+      <div class="btn-row">
+        <button class="secondary" onclick="saveCloudConfig()">保存Token到本机</button>
+        <button class="light" onclick="loadFromGithub()">从GitHub读取总台账</button>
+        <button class="ok" onclick="syncToGithub()">合并保存到GitHub总台账</button>
+      </div>
+      <div class="hint">
+        该页面是纯静态HTML。GitHub不允许匿名用户直接写入仓库，因此需要Token。不要把Token直接写进网页源码，也不要提交到公开仓库。正式长期使用时，建议后续改为服务端中转，避免把Token分发给多人。
+      </div>
+      <div id="cloudStatus" class="status">未连接GitHub。</div>
+    </section>
+
+    <section class="panel records-panel">
+      <h2>已录入课程规则</h2>
+      <div id="ruleList" class="hint">暂无录入。</div>
+    </section>
+
+    <div class="toolbar">
+      <div class="summary" id="summary">当前共 0 条使用记录。</div>
+      <div class="btn-row" style="margin:0;">
+        <button onclick="print()">打印 / 另存为PDF</button>
+        <button class="light" onclick="downloadHtml()">下载当前HTML</button>
+        <button class="light" onclick="exportCsv()">导出CSV</button>
+      </div>
+    </div>
+
+    <div class="table-wrap">
+      <table class="register" id="registerTable">
+        <thead>
+          <tr class="title-row">
+            <th colspan="10">实验室使用情况登记台账</th>
+          </tr>
+          <tr class="lab-row">
+            <td colspan="10">实验室名称：<span id="labNameText">数聚实验室</span></td>
+          </tr>
+          <tr class="head-row">
+            <th class="col-no">序号</th>
+            <th class="col-date">使用日期</th>
+            <th class="col-time">使用时段</th>
+            <th class="col-class">使用班级</th>
+            <th class="col-course">课程名称</th>
+            <th class="col-teacher">负责教师</th>
+            <th class="col-device">设备、用电运行状态</th>
+            <th class="col-safe">有无安全异常</th>
+            <th class="col-close">课后安全收尾情况（断电/关设备/锁门窗）</th>
+            <th class="col-sign">登记人签字</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    const LAB_NAME = "数聚实验室";
+    const CLOSE_STATUS = "收尾正常";
+
+    // 管理员配置区：上传到GitHub前，把 YOUR_GITHUB_USERNAME 改成你的GitHub用户名或组织名。
+    // 其余三项已按你的方案固定，老师打开网页后只需要填写Token。
+    const DEFAULT_GITHUB_OWNER = "wvais";
+    const DEFAULT_GITHUB_REPO = "shuju-lab-register";
+    const DEFAULT_GITHUB_BRANCH = "main";
+    const DEFAULT_GITHUB_PATH = "data/shuju-lab-usage.json";
+
+    const TERM_CONFIG = {
+      fall2025: { start: "2025-09-01", weeks: 18, label: "2025年9月—2026年1月" },
+      spring2026: { start: "2026-03-02", weeks: 16, label: "2026年3月—2026年6月" }
+    };
+
+    const WEEKDAY_NAMES = {
+      1: "周一",
+      2: "周二",
+      3: "周三",
+      4: "周四",
+      5: "周五",
+      6: "周六",
+      7: "周日"
+    };
+
+    let rules = [];
+    let rows = [];
+
+    function $(id) {
+      return document.getElementById(id);
+    }
+
+    function getCheckedValues(containerId) {
+      return Array.from(document.querySelectorAll(`#${containerId} input:checked`)).map(i => Number(i.value));
+    }
+
+    function syncTerm() {
+      const config = TERM_CONFIG[$("term").value];
+      $("startDate").value = config.start;
+      $("maxWeek").value = config.weeks;
+      $("weekStart").value = 1;
+      $("weekEnd").value = config.weeks;
+    }
+
+    function parseCustomWeeks(text, maxWeek) {
+      const set = new Set();
+      if (!text.trim()) return [];
+      text.split(/[，,]/).forEach(part => {
+        const item = part.trim();
+        if (!item) return;
+        if (item.includes("-")) {
+          const [a, b] = item.split("-").map(n => Number(n.trim()));
+          if (!Number.isInteger(a) || !Number.isInteger(b)) return;
+          const start = Math.min(a, b);
+          const end = Math.max(a, b);
+          for (let i = start; i <= end; i++) {
+            if (i >= 1 && i <= maxWeek) set.add(i);
+          }
+        } else {
+          const n = Number(item);
+          if (Number.isInteger(n) && n >= 1 && n <= maxWeek) set.add(n);
+        }
+      });
+      return Array.from(set).sort((a, b) => a - b);
+    }
+
+    function buildWeeks(mode, start, end, customText, maxWeek) {
+      if (mode === "custom") return parseCustomWeeks(customText, maxWeek);
+      const s = Math.max(1, Number(start));
+      const e = Math.min(maxWeek, Number(end));
+      const list = [];
+      for (let w = s; w <= e; w++) {
+        if (mode === "odd" && w % 2 !== 1) continue;
+        if (mode === "even" && w % 2 !== 0) continue;
+        list.push(w);
+      }
+      return list;
+    }
+
+    function addDays(dateString, days) {
+      const date = new Date(`${dateString}T00:00:00`);
+      date.setDate(date.getDate() + days);
+      return date;
+    }
+
+    function formatDate(date) {
+      const y = date.getFullYear();
+      const m = String(date.getMonth() + 1).padStart(2, "0");
+      const d = String(date.getDate()).padStart(2, "0");
+      return `${y}-${m}-${d}`;
+    }
+
+    function weekText(weeks) {
+      if (!weeks.length) return "";
+      const parts = [];
+      let start = weeks[0];
+      let prev = weeks[0];
+      for (let i = 1; i <= weeks.length; i++) {
+        const cur = weeks[i];
+        if (cur === prev + 1) {
+          prev = cur;
+          continue;
+        }
+        parts.push(start === prev ? `${start}` : `${start}-${prev}`);
+        start = cur;
+        prev = cur;
+      }
+      return parts.join(",");
+    }
+
+    function makeRuleId(rule) {
+      const core = [rule.term, rule.startDate, rule.teacher, rule.course, rule.className, rule.periods, rule.weekdays.join("."), rule.weeks.join(".")].join("|");
+      return "rule_" + hashString(core) + "_" + Date.now().toString(36);
+    }
+
+    function addSchedule(options = {}) {
+      const maxWeek = Number($("maxWeek").value || 0);
+      const weekdays = getCheckedValues("weekdayChecks");
+      const weeks = buildWeeks(
+        $("weekMode").value,
+        $("weekStart").value,
+        $("weekEnd").value,
+        $("customWeeks").value,
+        maxWeek
+      );
+
+      const rule = {
+        id: "",
+        labName: LAB_NAME,
+        term: $("term").value,
+        startDate: $("startDate").value,
+        maxWeek,
+        teacher: $("teacher").value.trim(),
+        course: $("course").value.trim(),
+        className: $("className").value.trim(),
+        signName: $("signName").value.trim(),
+        weekdays,
+        periods: $("periods").value.trim(),
+        weekMode: $("weekMode").value,
+        weeks,
+        deviceStatus: $("deviceStatus").value,
+        safetyStatus: $("safetyStatus").value,
+        closeStatus: CLOSE_STATUS,
+        createdAt: new Date().toISOString()
+      };
+
+      if (!rule.startDate) return alert("请填写第1周周一日期。");
+      if (!rule.teacher) return alert("请填写负责教师。");
+      if (!rule.course) return alert("请填写课程名称。");
+      if (!rule.className) return alert("请填写使用班级。");
+      if (!rule.periods) return alert("请填写上课节次/时段。");
+      if (!weekdays.length) return alert("请选择上课星期。");
+      if (!weeks.length) return alert("请选择有效周次。");
+
+      if (!rule.signName) rule.signName = rule.teacher;
+      rule.id = makeRuleId(rule);
+      rules.push(rule);
+      rebuildRows();
+      renderRules();
+      renderTable();
+      saveData(false);
+
+      if (!options.skipAutoSync && $("autoSync").checked) {
+        syncToGithub(false);
+      }
+      return rule;
+    }
+
+    async function addScheduleAndSync() {
+      const before = rules.length;
+      const rule = addSchedule({ skipAutoSync: true });
+      if (!rule || rules.length === before) return;
+      await syncToGithub();
+    }
+
+    function rebuildRows() {
+      rows = [];
+      rules.forEach(rule => {
+        const closeStatus = rule.closeStatus || CLOSE_STATUS;
+        rule.weeks.forEach(week => {
+          rule.weekdays.forEach(day => {
+            const offset = (week - 1) * 7 + (day - 1);
+            const date = addDays(rule.startDate, offset);
+            rows.push({
+              sortKey: `${formatDate(date)}-${rule.periods}-${rule.teacher}`,
+              date: formatDate(date),
+              weekday: WEEKDAY_NAMES[day],
+              periods: rule.periods,
+              className: rule.className,
+              course: rule.course,
+              teacher: rule.teacher,
+              deviceStatus: rule.deviceStatus,
+              safetyStatus: rule.safetyStatus,
+              closeStatus,
+              signName: rule.signName,
+              week
+            });
+          });
+        });
+      });
+      rows.sort((a, b) => a.sortKey.localeCompare(b.sortKey, "zh-CN"));
+    }
+
+    function renderTable() {
+      $("labNameText").textContent = LAB_NAME;
+      const body = $("tableBody");
+      body.innerHTML = "";
+
+      rows.forEach((row, index) => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${index + 1}</td>
+          <td>${row.date}<br>${row.weekday}</td>
+          <td>${escapeHtml(row.periods)}</td>
+          <td>${escapeHtml(row.className)}</td>
+          <td>${escapeHtml(row.course)}</td>
+          <td>${escapeHtml(row.teacher)}</td>
+          <td>${escapeHtml(row.deviceStatus)}</td>
+          <td>${escapeHtml(row.safetyStatus)}</td>
+          <td>${escapeHtml(row.closeStatus)}</td>
+          <td>${escapeHtml(row.signName)}</td>
+        `;
+        body.appendChild(tr);
+      });
+
+      for (let i = rows.length; i < Math.max(12, rows.length); i++) {
+        const tr = document.createElement("tr");
+        tr.innerHTML = "<td>&nbsp;</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>";
+        body.appendChild(tr);
+      }
+
+      $("summary").textContent = `当前共 ${rows.length} 条使用记录，已录入 ${rules.length} 条课程规则。`;
+    }
+
+    function renderRules() {
+      const box = $("ruleList");
+      if (!rules.length) {
+        box.textContent = "暂无录入。";
+        return;
+      }
+      const table = document.createElement("table");
+      table.className = "records";
+      table.innerHTML = `
+        <thead>
+          <tr>
+            <th>序号</th><th>教师</th><th>课程</th><th>班级</th><th>星期</th><th>节次</th><th>周次</th><th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${rules.map((r, i) => `
+            <tr>
+              <td>${i + 1}</td>
+              <td>${escapeHtml(r.teacher)}</td>
+              <td>${escapeHtml(r.course)}</td>
+              <td>${escapeHtml(r.className)}</td>
+              <td>${r.weekdays.map(d => WEEKDAY_NAMES[d]).join("、")}</td>
+              <td>${escapeHtml(r.periods)}</td>
+              <td>第${weekText(r.weeks)}周</td>
+              <td><button class="danger" style="padding:5px 9px;" onclick="deleteRule('${r.id}')">删除</button></td>
+            </tr>`).join("")}
+        </tbody>
+      `;
+      box.innerHTML = "";
+      box.appendChild(table);
+    }
+
+    function deleteRule(id) {
+      rules = rules.filter(r => r.id !== id);
+      rebuildRows();
+      renderRules();
+      renderTable();
+      saveData(false);
+    }
+
+    function clearForm() {
+      $("teacher").value = "";
+      $("course").value = "";
+      $("className").value = "";
+      $("signName").value = "";
+      $("periods").value = "";
+      $("customWeeks").value = "";
+      document.querySelectorAll("#weekdayChecks input").forEach(i => i.checked = false);
+    }
+
+    function clearAll() {
+      if (!confirm("确定清空本机台账记录吗？不会自动删除GitHub总台账。")) return;
+      rules = [];
+      rows = [];
+      localStorage.removeItem("shuju_lab_usage_register_rules");
+      renderRules();
+      renderTable();
+    }
+
+    function saveData(showAlert = true) {
+      const payload = { labName: LAB_NAME, rules, updatedAt: new Date().toISOString() };
+      localStorage.setItem("shuju_lab_usage_register_rules", JSON.stringify(payload));
+      if (showAlert) alert("已保存到本机浏览器。注意：更换电脑或清理浏览器缓存后可能丢失。需要多人共享时，请使用GitHub同步。");
+    }
+
+    function loadData() {
+      const raw = localStorage.getItem("shuju_lab_usage_register_rules");
+      if (!raw) return alert("本机暂无已保存数据。");
+      try {
+        const payload = JSON.parse(raw);
+        rules = normalizeRules(payload.rules || []);
+        rebuildRows();
+        renderRules();
+        renderTable();
+        alert("已读取本机保存数据。");
+      } catch (e) {
+        alert("读取失败，保存数据可能已损坏。");
+      }
+    }
+
+    function saveCloudConfig() {
+      const config = getCloudConfig();
+      const payload = {
+        owner: DEFAULT_GITHUB_OWNER,
+        repo: DEFAULT_GITHUB_REPO,
+        branch: DEFAULT_GITHUB_BRANCH,
+        path: DEFAULT_GITHUB_PATH,
+        rememberToken: $("rememberToken").checked,
+        token: $("rememberToken").checked ? config.token : ""
+      };
+      localStorage.setItem("shuju_lab_github_config", JSON.stringify(payload));
+      setCloudStatus("同步设置已保存。Token只会按你的勾选保存在本机浏览器。", "ok");
+    }
+
+    function applyDefaultCloudConfig() {
+      $("ghOwner").value = DEFAULT_GITHUB_OWNER;
+      $("ghRepo").value = DEFAULT_GITHUB_REPO;
+      $("ghBranch").value = DEFAULT_GITHUB_BRANCH;
+      $("ghPath").value = DEFAULT_GITHUB_PATH;
+      const ownerDisplay = $("ghOwnerDisplay");
+      if (ownerDisplay) ownerDisplay.textContent = DEFAULT_GITHUB_OWNER;
+    }
+
+    function loadCloudConfig() {
+      applyDefaultCloudConfig();
+      const raw = localStorage.getItem("shuju_lab_github_config");
+      if (!raw) return;
+      try {
+        const config = JSON.parse(raw);
+        $("rememberToken").checked = !!config.rememberToken;
+        if (config.rememberToken && config.token) $("ghToken").value = config.token;
+      } catch (e) {}
+    }
+
+    function getCloudConfig() {
+      return {
+        owner: DEFAULT_GITHUB_OWNER,
+        repo: DEFAULT_GITHUB_REPO,
+        branch: DEFAULT_GITHUB_BRANCH,
+        path: DEFAULT_GITHUB_PATH,
+        token: $("ghToken").value.trim()
+      };
+    }
+
+    function validateCloudConfig(config) {
+      if (!config.owner || config.owner === "YOUR_GITHUB_USERNAME") throw new Error("管理员尚未配置GitHub Owner：请先把HTML源码中的 YOUR_GITHUB_USERNAME 改成你的GitHub用户名或组织名。");
+      if (!config.repo) throw new Error("请填写GitHub仓库名。");
+      if (!config.branch) throw new Error("请填写分支名，例如 main。");
+      if (!config.path) throw new Error("请填写数据文件路径，例如 data/shuju-lab-usage.json。");
+      if (!config.token) throw new Error("请填写GitHub Token。静态网页写入仓库必须使用Token。不要把Token写进HTML源码。");
+    }
+
+    function setCloudStatus(text, type = "") {
+      const el = $("cloudStatus");
+      el.className = "status" + (type ? ` ${type}` : "");
+      el.textContent = text;
+    }
+
+    function githubHeaders(token) {
+      return {
+        "Accept": "application/vnd.github+json",
+        "Authorization": `Bearer ${token}`
+      };
+    }
+
+    function encodePath(path) {
+      return path.split("/").map(encodeURIComponent).join("/");
+    }
+
+    async function githubGetFile(config) {
+      const url = `https://api.github.com/repos/${encodeURIComponent(config.owner)}/${encodeURIComponent(config.repo)}/contents/${encodePath(config.path)}?ref=${encodeURIComponent(config.branch)}`;
+      const res = await fetch(url, { headers: githubHeaders(config.token) });
+      if (res.status === 404) {
+        return { sha: null, data: { version: 1, labName: LAB_NAME, rules: [], updatedAt: null } };
+      }
+      if (!res.ok) {
+        const txt = await safeReadText(res);
+        throw new Error(`读取GitHub失败：HTTP ${res.status} ${txt}`);
+      }
+      const file = await res.json();
+      const text = base64ToUtf8(String(file.content || "").replace(/\n/g, ""));
+      let data;
+      try {
+        data = JSON.parse(text);
+      } catch (e) {
+        throw new Error("GitHub上的数据文件不是有效JSON，请检查数据文件内容。");
+      }
+      return { sha: file.sha, data: { version: 1, labName: LAB_NAME, rules: normalizeRules(data.rules || []), updatedAt: data.updatedAt || null } };
+    }
+
+    async function githubPutFile(config, payload, sha) {
+      const url = `https://api.github.com/repos/${encodeURIComponent(config.owner)}/${encodeURIComponent(config.repo)}/contents/${encodePath(config.path)}`;
+      const body = {
+        message: `更新数聚实验室使用情况登记台账 ${new Date().toLocaleString("zh-CN")}`,
+        content: utf8ToBase64(JSON.stringify(payload, null, 2)),
+        branch: config.branch
+      };
+      if (sha) body.sha = sha;
+      const res = await fetch(url, {
+        method: "PUT",
+        headers: githubHeaders(config.token),
+        body: JSON.stringify(body)
+      });
+      if (res.status === 409) {
+        throw new Error("GITHUB_CONFLICT");
+      }
+      if (!res.ok) {
+        const txt = await safeReadText(res);
+        throw new Error(`保存GitHub失败：HTTP ${res.status} ${txt}`);
+      }
+      return await res.json();
+    }
+
+    async function loadFromGithub() {
+      try {
+        saveCloudConfig();
+        const config = getCloudConfig();
+        validateCloudConfig(config);
+        setCloudStatus("正在从GitHub读取总台账……");
+        const remote = await githubGetFile(config);
+        rules = normalizeRules(remote.data.rules || []);
+        rebuildRows();
+        renderRules();
+        renderTable();
+        saveData(false);
+        setCloudStatus(`已从GitHub读取总台账：${rules.length} 条课程规则，${rows.length} 条使用记录。`, "ok");
+      } catch (err) {
+        setCloudStatus(err.message || String(err), "error");
+      }
+    }
+
+    async function syncToGithub(showFinalAlert = true) {
+      try {
+        saveCloudConfig();
+        const config = getCloudConfig();
+        validateCloudConfig(config);
+        setCloudStatus("正在合并并保存到GitHub总台账……");
+
+        let lastError = null;
+        for (let attempt = 1; attempt <= 3; attempt++) {
+          try {
+            let sha = null;
+            let remoteRules = [];
+            if ($("mergeRemoteFirst").checked) {
+              const remote = await githubGetFile(config);
+              sha = remote.sha;
+              remoteRules = normalizeRules(remote.data.rules || []);
+            }
+            const mergedRules = mergeRules(remoteRules, rules);
+            const payload = {
+              version: 1,
+              labName: LAB_NAME,
+              updatedAt: new Date().toISOString(),
+              rules: mergedRules
+            };
+            await githubPutFile(config, payload, sha);
+            rules = mergedRules;
+            rebuildRows();
+            renderRules();
+            renderTable();
+            saveData(false);
+            setCloudStatus(`已保存到GitHub总台账：${rules.length} 条课程规则，${rows.length} 条使用记录。`, "ok");
+            if (showFinalAlert) alert("已合并保存到GitHub总台账。");
+            return;
+          } catch (err) {
+            lastError = err;
+            if (err.message === "GITHUB_CONFLICT" && attempt < 3) {
+              setCloudStatus(`GitHub文件刚被其他人更新，正在第 ${attempt + 1} 次重新合并……`, "warn");
+              await sleep(600);
+              continue;
+            }
+            throw err;
+          }
+        }
+        throw lastError;
+      } catch (err) {
+        const msg = err.message === "GITHUB_CONFLICT" ? "保存冲突：请先点击“从GitHub读取总台账”，再重新保存。" : (err.message || String(err));
+        setCloudStatus(msg, "error");
+      }
+    }
+
+    function mergeRules(remoteRules, localRules) {
+      const map = new Map();
+      normalizeRules(remoteRules).forEach(r => map.set(ruleKey(r), r));
+      normalizeRules(localRules).forEach(r => map.set(ruleKey(r), r));
+      return Array.from(map.values()).sort((a, b) => {
+        const ka = [a.term, a.teacher, a.course, a.className, a.periods, a.createdAt || ""].join("|");
+        const kb = [b.term, b.teacher, b.course, b.className, b.periods, b.createdAt || ""].join("|");
+        return ka.localeCompare(kb, "zh-CN");
+      });
+    }
+
+    function normalizeRules(list) {
+      return list.map(r => {
+        const copy = {
+          ...r,
+          labName: LAB_NAME,
+          closeStatus: CLOSE_STATUS,
+          weekdays: (r.weekdays || []).map(Number).filter(n => n >= 1 && n <= 7),
+          weeks: (r.weeks || []).map(Number).filter(n => n >= 1),
+          createdAt: r.createdAt || new Date().toISOString()
+        };
+        if (!copy.id) copy.id = makeRuleId(copy);
+        return copy;
+      });
+    }
+
+    function ruleKey(rule) {
+      if (rule.id) return rule.id;
+      return hashString([rule.term, rule.startDate, rule.teacher, rule.course, rule.className, rule.periods, rule.weekdays.join("."), rule.weeks.join(".")].join("|"));
+    }
+
+    function hashString(str) {
+      let h = 2166136261;
+      for (let i = 0; i < str.length; i++) {
+        h ^= str.charCodeAt(i);
+        h += (h << 1) + (h << 4) + (h << 7) + (h << 8) + (h << 24);
+      }
+      return (h >>> 0).toString(36);
+    }
+
+    function sleep(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    async function safeReadText(res) {
+      try {
+        const data = await res.json();
+        return data.message ? `- ${data.message}` : JSON.stringify(data).slice(0, 200);
+      } catch (e) {
+        try { return (await res.text()).slice(0, 200); } catch (_) { return ""; }
+      }
+    }
+
+    function utf8ToBase64(str) {
+      const bytes = new TextEncoder().encode(str);
+      let binary = "";
+      const chunkSize = 0x8000;
+      for (let i = 0; i < bytes.length; i += chunkSize) {
+        const chunk = bytes.subarray(i, i + chunkSize);
+        binary += String.fromCharCode.apply(null, chunk);
+      }
+      return btoa(binary);
+    }
+
+    function base64ToUtf8(base64) {
+      const binary = atob(base64);
+      const bytes = new Uint8Array(binary.length);
+      for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+      return new TextDecoder().decode(bytes);
+    }
+
+    function exportCsv() {
+      const headers = ["序号", "使用日期", "星期", "使用时段", "使用班级", "课程名称", "负责教师", "设备、用电运行状态", "有无安全异常", "课后安全收尾情况", "登记人签字"];
+      const data = rows.map((r, i) => [
+        i + 1, r.date, r.weekday, r.periods, r.className, r.course, r.teacher,
+        r.deviceStatus, r.safetyStatus, r.closeStatus, r.signName
+      ]);
+      const csv = [headers, ...data].map(row => row.map(csvCell).join(",")).join("\n");
+      downloadBlob("数聚实验室使用情况登记台账.csv", "\uFEFF" + csv, "text/csv;charset=utf-8");
+    }
+
+    function downloadHtml() {
+      const html = document.documentElement.outerHTML;
+      downloadBlob("数聚实验室使用情况登记台账_GitHub固定配置版.html", "<!DOCTYPE html>\n" + html, "text/html;charset=utf-8");
+    }
+
+    function downloadBlob(filename, content, type) {
+      const blob = new Blob([content], { type });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    }
+
+    function csvCell(value) {
+      const text = String(value ?? "");
+      return `"${text.replace(/"/g, '""')}"`;
+    }
+
+    function escapeHtml(text) {
+      return String(text ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    function loadDataFromStorageSilently() {
+      const raw = localStorage.getItem("shuju_lab_usage_register_rules");
+      if (!raw) return;
+      try {
+        const payload = JSON.parse(raw);
+        rules = normalizeRules(payload.rules || []);
+        rebuildRows();
+      } catch (e) {}
+    }
+
+    syncTerm();
+    loadCloudConfig();
+    loadDataFromStorageSilently();
+    renderRules();
+    renderTable();
+  </script>
+</body>
+</html>
