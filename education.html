@@ -1,0 +1,497 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>实验室安全教育台账</title>
+  <style>
+    :root{--border:#111;--bg:#f6f7f9;--card:#fff;--text:#111;--muted:#666;--primary:#1f4e79;--ok:#1f7a3f;--danger:#9b1c1c}
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--bg);font-family:"Microsoft YaHei",SimSun,Arial,sans-serif;color:var(--text)}
+    .page{max-width:1320px;margin:0 auto;padding:24px}
+    .panel{background:var(--card);border:1px solid #ddd;border-radius:10px;padding:18px;margin-bottom:18px;box-shadow:0 3px 12px rgba(0,0,0,.04)}
+    .panel h2{margin:0 0 14px;font-size:20px;color:var(--primary)}
+    .grid{display:grid;grid-template-columns:repeat(4,minmax(180px,1fr));gap:12px 14px}
+    label{display:block;font-size:14px;margin-bottom:5px;color:#222}
+    input,select,textarea{width:100%;height:38px;border:1px solid #bbb;border-radius:6px;padding:7px 9px;font:14px inherit;background:#fff}
+    textarea{height:76px;resize:vertical}
+    .wide{grid-column:span 2}
+    .btns{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+    button{border:0;border-radius:7px;padding:9px 14px;font:14px inherit;cursor:pointer;background:var(--primary);color:#fff}
+    button.ok{background:var(--ok)}
+    button.light{background:#e9eef5;color:#111;border:1px solid #c8d2df}
+    .status{margin-top:10px;padding:9px 10px;border-radius:6px;background:#f4f6f8;color:#333;font-size:13px;line-height:1.6;min-height:36px}
+    .status.ok{background:#eef8f1;color:var(--ok)}
+    .status.err{background:#fff0f0;color:var(--danger)}
+    .toolbar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:10px}
+    .summary{color:#333;font-size:14px}
+    .register-page{background:#fff;overflow-x:auto;border:1px solid var(--border);margin-bottom:16px}
+    table.register{width:100%;border-collapse:collapse;table-layout:fixed;background:#fff}
+    .register th,.register td{border:1px solid var(--border);text-align:center;vertical-align:middle;padding:5px 4px;font-size:13px;line-height:1.35;word-break:break-all;height:40px}
+    .register td[contenteditable="true"]{background:#fff}
+    .register input.people-input{width:64px;height:28px;text-align:center;border:0;border-bottom:1px solid #999;border-radius:0;background:transparent;padding:2px;font-size:13px}
+    .register .title-row th{font-size:24px;font-weight:700;padding:8px 0;border-left:0;border-right:0}
+    .register .lab-row td{height:34px;text-align:left;padding-left:8px}
+    .register .head-row th{background:#f1f1f1;font-weight:600;height:62px}
+    .col-no{width:44px}.col-date{width:90px}.col-place{width:108px}.col-object{width:165px}.col-content{width:276px}.col-form{width:154px}.col-teacher{width:94px}.col-people{width:80px}
+    @media print{body{background:#fff}.page{max-width:none;padding:0}.panel,.toolbar{display:none!important}.register-page{border:0;margin:0;page-break-after:always;break-after:page;overflow:visible}.register-page:last-child{page-break-after:auto;break-after:auto}.register tr{page-break-inside:avoid}.register th,.register td{font-size:12px}.register .title-row th{font-size:22px}.register input.people-input{border:0;width:60px}@page{size:A4 landscape;margin:10mm}}
+    @media(max-width:980px){.grid{grid-template-columns:repeat(2,minmax(160px,1fr))}.wide{grid-column:span 2}}
+    @media(max-width:560px){.page{padding:12px}.grid{grid-template-columns:1fr}.wide{grid-column:1}}
+  </style>
+</head>
+<body>
+  <div class="page">
+    <section class="panel">
+      <h2>实验室安全教育台账</h2>
+      <div class="grid">
+        <div>
+          <label for="labKey">实验室名称</label>
+          <select id="labKey" onchange="switchLab()">
+            <option value="shuju">数聚实验室（308）</option>
+            <option value="bigdata">大数据实验室（702）</option>
+          </select>
+        </div>
+        <div class="wide">
+          <label for="accessToken">访问令牌</label>
+          <input id="accessToken" type="password" placeholder="由管理员提供">
+        </div>
+        <div class="wide">
+          <label for="extraTeachers">补充教师姓名</label>
+          <textarea id="extraTeachers" placeholder="填写不在该实验室上课但需要纳入安全教育台账的教师姓名；多个姓名可用逗号、顿号、空格或换行分隔"></textarea>
+        </div>
+      </div>
+      <div class="btns">
+        <button class="light" onclick="loadUsageRegister()">从使用总台账读取并生成</button>
+        <button onclick="print()">打印 / 另存为PDF</button>
+        <button class="light" onclick="exportCsv()">导出CSV</button>
+      </div>
+      <div id="status" class="status ok">已切换到数聚实验室。</div>
+    </section>
+
+    <div class="toolbar">
+      <div class="summary" id="summary">当前共 0 条安全教育记录。</div>
+    </div>
+
+    <div id="registerPages"></div>
+  </div>
+
+  <script>
+    const OWNER = "wvais";
+    const REPO = "shuju-lab-register";
+    const BRANCH = "main";
+    const PAGE_SIZE = 11;
+
+    const LABS = {
+      shuju: { name: "数聚实验室", room: "308", path: "data/shuju-lab-usage.json" },
+      bigdata: { name: "大数据实验室", room: "702", path: "data/bigdata-lab-usage.json" }
+    };
+
+    const TERMS = {
+      "25-26-1": { start: "2025-09-01", weeks: 16 },
+      "25-26-2": { start: "2026-03-09", weeks: 16 }
+    };
+
+    const WEEKDAYS = {1:"周一",2:"周二",3:"周三",4:"周四",5:"周五",6:"周六",7:"周日"};
+    const EDUCATION_ITEMS = [
+      { month: "2025-09", content: "设备操作", firstLesson: true },
+      { month: "2025-11", content: "用电消防", firstLesson: false },
+      { month: "2026-03", content: "数据安全", firstLesson: true },
+      { month: "2026-05", content: "应急处置", firstLesson: false }
+    ];
+
+    let generatedRows = [];
+
+    function $(id){return document.getElementById(id)}
+    function getLabKey(){return $("labKey").value}
+    function getLab(){return LABS[getLabKey()]}
+    function getLabDisplayName(){return `${getLab().name}（${getLab().room}）`}
+
+    function switchLab(){
+      savePeopleCounts();
+      generatedRows = [];
+      renderPages();
+      setStatus(`已切换到${getLab().name}。`, "ok");
+    }
+
+    function setStatus(text, type=""){
+      const el = $("status");
+      el.className = "status" + (type ? ` ${type}` : "");
+      el.textContent = text;
+    }
+
+    function getToken(){return $("accessToken").value.trim()}
+
+    async function loadUsageRegister(){
+      try{
+        savePeopleCounts();
+        if(!getToken()) throw new Error("请填写访问令牌。");
+        setStatus("正在读取使用总台账并生成安全教育台账……");
+        const remote = await getRemoteFile({
+          owner: OWNER,
+          repo: REPO,
+          branch: BRANCH,
+          path: getLab().path,
+          token: getToken()
+        });
+        const rules = normalizeRules(remote.data.rules || []);
+        const classRows = expandClassRows(rules);
+        generatedRows = generateEducationRows(classRows, getExtraTeacherNames());
+        renderPages();
+        restorePeopleCounts();
+        setStatus(`已生成${generatedRows.length}条安全教育记录。按“每位教师每个指定月份1条”生成；9月和3月取该教师开学第一课，11月和5月取该教师当月实际上课日并尽量错开。`, "ok");
+      }catch(error){
+        setStatus(error.message || String(error), "err");
+      }
+    }
+
+    async function getRemoteFile(config){
+      const url = `https://api.github.com/repos/${encodeURIComponent(config.owner)}/${encodeURIComponent(config.repo)}/contents/${encodePath(config.path)}?ref=${encodeURIComponent(config.branch)}`;
+      const response = await fetch(url, { headers: apiHeaders(config.token) });
+      if(response.status === 404) throw new Error("未找到对应实验室的使用总台账数据文件。");
+      if(!response.ok) throw new Error(`读取使用总台账失败：HTTP ${response.status} ${await safeReadText(response)}`);
+      const file = await response.json();
+      const text = base64ToUtf8(String(file.content || "").replace(/\n/g,""));
+      try{
+        return { sha:file.sha, data:JSON.parse(text) };
+      }catch(e){
+        throw new Error("使用总台账数据文件不是有效JSON，请检查文件内容。");
+      }
+    }
+
+    function apiHeaders(token){
+      return {"Accept":"application/vnd.github+json","Authorization":`Bearer ${token}`};
+    }
+
+    function encodePath(path){
+      return path.split("/").map(encodeURIComponent).join("/");
+    }
+
+    function normalizeRules(list){
+      return (list || []).map(item => {
+        const term = TERMS[item.term] ? item.term : "25-26-1";
+        const labKey = LABS[item.labKey] ? item.labKey : getLabKey();
+        return {
+          ...item,
+          labKey,
+          labName: LABS[labKey].name,
+          term,
+          startDate: item.startDate || TERMS[term].start,
+          maxWeek: Number(item.maxWeek || TERMS[term].weeks),
+          weekdays: (item.weekdays || []).map(Number).filter(n => n >= 1 && n <= 7),
+          weeks: (item.weeks || []).map(Number).filter(n => n >= 1)
+        };
+      });
+    }
+
+    function expandClassRows(rules){
+      const map = new Map();
+      rules.forEach(rule => {
+        rule.weeks.forEach(week => {
+          rule.weekdays.forEach(day => {
+            const offset = (week - 1) * 7 + (day - 1);
+            const date = formatDate(addDays(rule.startDate, offset));
+            const key = [date, rule.teacher, rule.course, rule.className, rule.periods].join("|");
+            map.set(key, {
+              date,
+              month: date.slice(0,7),
+              teacher: rule.teacher || "",
+              course: rule.course || "",
+              className: rule.className || "",
+              periods: rule.periods || "",
+              term: rule.term || "",
+              weekday: WEEKDAYS[day] || ""
+            });
+          });
+        });
+      });
+      return Array.from(map.values()).sort((a,b) => [a.date,a.teacher,a.className].join("|").localeCompare([b.date,b.teacher,b.className].join("|"), "zh-CN"));
+    }
+
+    function generateEducationRows(classRows, extraTeachers = []){
+      const teacherGroups = new Map();
+      classRows.forEach(row => {
+        const teacher = (row.teacher || "未填写").trim();
+        if(!teacherGroups.has(teacher)) teacherGroups.set(teacher, []);
+        teacherGroups.get(teacher).push(row);
+      });
+
+      extraTeachers.forEach(name => {
+        if(!teacherGroups.has(name)) teacherGroups.set(name, []);
+      });
+      const extraTeacherSet = new Set(extraTeachers);
+
+      const usedDateCount = new Map();
+      const rows = [];
+      Array.from(teacherGroups.keys()).sort((a,b)=>a.localeCompare(b,"zh-CN")).forEach(teacher => {
+        const teacherRows = (teacherGroups.get(teacher) || []).sort(compareClassRow);
+        const isExtraTeacher = extraTeacherSet.has(teacher) && !teacherRows.length;
+        EDUCATION_ITEMS.forEach(item => {
+          const candidates = teacherRows.filter(row => row.month === item.month);
+          let chosen = null;
+
+          if(candidates.length){
+            if(item.firstLesson){
+              // 9月、3月按该教师本学期开学第一课生成，只生成一条；班级取该节课对应任课班级。
+              chosen = chooseFirstLesson(candidates);
+            }else{
+              // 11月、5月仍然每位教师只生成一条，优先选实际上课日，并尽量与其他教师错开。
+              chosen = chooseBalancedDate(candidates, usedDateCount);
+            }
+          }else if(isExtraTeacher){
+            // 补充教师不在该实验室上课，没有任课班级和上课日；按同月可用教学日补入，班级字段保留为可编辑的“相关班级学生”。
+            chosen = chooseSupplementEducationRow(item, classRows, usedDateCount, teacher);
+          }
+
+          if(!chosen) return;
+          usedDateCount.set(chosen.date, (usedDateCount.get(chosen.date) || 0) + 1);
+          const objectText = chosen.className && chosen.className !== "相关班级" ? `${chosen.className}学生` : "相关班级学生";
+          rows.push({
+            id: "edu_" + hashString([getLabKey(), teacher, item.month, item.content, chosen.date, objectText].join("|")),
+            date: chosen.date,
+            place: getLab().name,
+            object: objectText,
+            content: item.content,
+            form: "集中授课",
+            teacher: teacher,
+            people: ""
+          });
+        });
+      });
+
+      return rows.sort((a,b)=>[a.date,a.teacher,a.content,a.object].join("|").localeCompare([b.date,b.teacher,b.content,b.object].join("|"), "zh-CN"));
+    }
+
+    function getExtraTeacherNames(){
+      return parseNameList($("extraTeachers") ? $("extraTeachers").value : "");
+    }
+
+    function parseNameList(text){
+      return Array.from(new Set(String(text || "")
+        .normalize("NFKC")
+        .split(/[、,，;；\s]+/)
+        .map(name => name.trim())
+        .filter(Boolean)));
+    }
+
+    function chooseSupplementEducationRow(item, classRows, usedDateCount, teacher){
+      const sameMonthRows = classRows.filter(row => row.month === item.month).sort(compareClassRow);
+      if(sameMonthRows.length){
+        const chosen = item.firstLesson ? sameMonthRows[0] : chooseBalancedDate(sameMonthRows, usedDateCount);
+        return { ...chosen, teacher, className: chosen.className || "相关班级" };
+      }
+      return {
+        date: chooseFallbackEducationDate(item.month, usedDateCount),
+        month: item.month,
+        teacher,
+        className: "相关班级",
+        course: "",
+        periods: ""
+      };
+    }
+
+    function chooseFallbackEducationDate(month, usedDateCount){
+      const candidates = fallbackEducationDates(month);
+      return candidates.sort((a,b) => {
+        const ca = usedDateCount.get(a) || 0;
+        const cb = usedDateCount.get(b) || 0;
+        if(ca !== cb) return ca - cb;
+        return a.localeCompare(b);
+      })[0];
+    }
+
+    function fallbackEducationDates(month){
+      const base = {
+        "2025-09": "2025-09-01",
+        "2025-11": "2025-11-03",
+        "2026-03": "2026-03-09",
+        "2026-05": "2026-05-06"
+      }[month] || `${month}-01`;
+      const result = [];
+      let date = new Date(base + "T00:00:00");
+      while(result.length < 10 && formatDate(date).slice(0,7) === month){
+        const day = date.getDay();
+        if(day !== 0 && day !== 6) result.push(formatDate(date));
+        date.setDate(date.getDate() + 1);
+      }
+      return result.length ? result : [base];
+    }
+
+    function compareClassRow(a,b){
+      return [a.date, a.periods || "", a.className || "", a.course || ""].join("|").localeCompare([b.date, b.periods || "", b.className || "", b.course || ""].join("|"), "zh-CN");
+    }
+
+    function chooseFirstLesson(candidates){
+      return [...candidates].sort(compareClassRow)[0];
+    }
+
+    function chooseBalancedDate(candidates, usedDateCount){
+      const byDate = new Map();
+      [...candidates].sort(compareClassRow).forEach(row => {
+        if(!byDate.has(row.date)) byDate.set(row.date, row);
+      });
+      return Array.from(byDate.values()).sort((a,b) => {
+        const ca = usedDateCount.get(a.date) || 0;
+        const cb = usedDateCount.get(b.date) || 0;
+        if(ca !== cb) return ca - cb;
+        return compareClassRow(a,b);
+      })[0];
+    }
+
+    function renderPages(){
+      const pageCount = Math.max(1, Math.ceil(generatedRows.length / PAGE_SIZE));
+      let html = "";
+      for(let pageIndex = 0; pageIndex < pageCount; pageIndex++){
+        const pageRows = generatedRows.slice(pageIndex * PAGE_SIZE, pageIndex * PAGE_SIZE + PAGE_SIZE);
+        html += createRegisterTable(pageRows, pageIndex * PAGE_SIZE);
+      }
+      $("registerPages").innerHTML = html;
+      $("summary").textContent = `当前共 ${generatedRows.length} 条安全教育记录。`;
+      bindPeopleInputs();
+    }
+
+    function createRegisterTable(pageRows, startIndex){
+      let body = "";
+      for(let i = 0; i < PAGE_SIZE; i++){
+        const row = pageRows[i];
+        if(row){
+          body += `<tr data-row="1" data-id="${escapeHtml(row.id)}">
+            <td>${startIndex + i + 1}</td>
+            <td contenteditable="true">${escapeHtml(row.date)}</td>
+            <td contenteditable="true">${escapeHtml(row.place)}</td>
+            <td contenteditable="true">${escapeHtml(row.object)}</td>
+            <td contenteditable="true">${escapeHtml(row.content)}</td>
+            <td contenteditable="true">${escapeHtml(row.form)}</td>
+            <td contenteditable="true">${escapeHtml(row.teacher)}</td>
+            <td><input class="people-input" data-id="${escapeHtml(row.id)}" value="${escapeHtml(row.people)}"></td>
+          </tr>`;
+        }else{
+          body += `<tr><td>&nbsp;</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>`;
+        }
+      }
+      return `<div class="register-page"><table class="register">
+        <thead>
+          <tr class="title-row"><th colspan="8">实验室安全教育台账</th></tr>
+          <tr class="lab-row"><td colspan="8">实验室名称：${escapeHtml(getLab().name)}</td></tr>
+          <tr class="head-row">
+            <th class="col-no">序号</th>
+            <th class="col-date">日期</th>
+            <th class="col-place">教育地点</th>
+            <th class="col-object">教育对象<br>（学生班级）</th>
+            <th class="col-content">教育主要内容<br>（设备操作、用电消防、数据安全、应急处置等）</th>
+            <th class="col-form">教育形式<br>（集中授课/实操演练/案例警示）</th>
+            <th class="col-teacher">授课老师</th>
+            <th class="col-people">参与人数</th>
+          </tr>
+        </thead>
+        <tbody>${body}</tbody>
+      </table></div>`;
+    }
+
+    function bindPeopleInputs(){
+      document.querySelectorAll(".people-input").forEach(input => {
+        input.addEventListener("input", savePeopleCounts);
+      });
+    }
+
+    function peopleStorageKey(){
+      return `lab_education_people_${getLabKey()}`;
+    }
+
+    function savePeopleCounts(){
+      const values = {};
+      document.querySelectorAll(".people-input").forEach(input => {
+        values[input.dataset.id] = input.value;
+      });
+      localStorage.setItem(peopleStorageKey(), JSON.stringify(values));
+    }
+
+    function restorePeopleCounts(){
+      try{
+        const values = JSON.parse(localStorage.getItem(peopleStorageKey()) || "{}");
+        document.querySelectorAll(".people-input").forEach(input => {
+          if(values[input.dataset.id] !== undefined) input.value = values[input.dataset.id];
+        });
+      }catch(e){}
+    }
+
+    function exportCsv(){
+      savePeopleCounts();
+      const headers = ["序号","实验室名称","日期","教育地点","教育对象（学生班级）","教育主要内容","教育形式","授课老师","参与人数"];
+      const data = [];
+      document.querySelectorAll("tr[data-row='1']").forEach((tr, index) => {
+        const cells = Array.from(tr.children);
+        data.push([
+          index + 1,
+          getLab().name,
+          cells[1].textContent.trim(),
+          cells[2].textContent.trim(),
+          cells[3].textContent.trim(),
+          cells[4].textContent.trim(),
+          cells[5].textContent.trim(),
+          cells[6].textContent.trim(),
+          cells[7].querySelector("input") ? cells[7].querySelector("input").value.trim() : cells[7].textContent.trim()
+        ]);
+      });
+      const csv = [headers, ...data].map(row => row.map(csvCell).join(",")).join("\n");
+      downloadBlob(`${getLab().name}安全教育台账.csv`, "\uFEFF" + csv, "text/csv;charset=utf-8");
+    }
+
+    function addDays(dateString, days){
+      const date = new Date(dateString + "T00:00:00");
+      date.setDate(date.getDate() + days);
+      return date;
+    }
+
+    function formatDate(date){
+      return date.getFullYear() + "-" + String(date.getMonth() + 1).padStart(2,"0") + "-" + String(date.getDate()).padStart(2,"0");
+    }
+
+    async function safeReadText(response){
+      try{
+        const data = await response.json();
+        return data.message ? `- ${data.message}` : JSON.stringify(data).slice(0,200);
+      }catch(e){
+        try{return (await response.text()).slice(0,200)}catch(_){return ""}
+      }
+    }
+
+    function base64ToUtf8(base64){
+      const binary = atob(base64);
+      const bytes = new Uint8Array(binary.length);
+      for(let i=0;i<binary.length;i++) bytes[i] = binary.charCodeAt(i);
+      return new TextDecoder().decode(bytes);
+    }
+
+    function hashString(str){
+      let hash = 2166136261;
+      for(let i=0;i<str.length;i++){
+        hash ^= str.charCodeAt(i);
+        hash += (hash << 1) + (hash << 4) + (hash << 7) + (hash << 8) + (hash << 24);
+      }
+      return (hash >>> 0).toString(36);
+    }
+
+    function downloadBlob(filename, content, type){
+      const blob = new Blob([content], {type});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    }
+
+    function csvCell(value){return `"${String(value ?? "").replace(/"/g,'""')}"`}
+    function escapeHtml(value){
+      return String(value ?? "")
+        .replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;").replace(/'/g,"&#039;");
+    }
+
+    window.addEventListener("beforeprint", savePeopleCounts);
+    renderPages();
+  </script>
+</body>
+</html>

@@ -1,0 +1,486 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>实验室安全检查日志</title>
+  <style>
+    :root{--border:#111;--bg:#f6f7f9;--card:#fff;--text:#111;--muted:#666;--primary:#1f4e79;--ok:#1f7a3f;--danger:#9b1c1c}
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--bg);font-family:"Microsoft YaHei",SimSun,Arial,sans-serif;color:var(--text)}
+    .page{max-width:1320px;margin:0 auto;padding:24px}
+    .panel{background:var(--card);border:1px solid #ddd;border-radius:10px;padding:18px;margin-bottom:18px;box-shadow:0 3px 12px rgba(0,0,0,.04)}
+    .panel h2{margin:0 0 14px;font-size:20px;color:var(--primary)}
+    .grid{display:grid;grid-template-columns:repeat(4,minmax(180px,1fr));gap:12px 14px}
+    label{display:block;font-size:14px;margin-bottom:5px;color:#222}
+    input,select,textarea{width:100%;height:38px;border:1px solid #bbb;border-radius:6px;padding:7px 9px;font:14px inherit;background:#fff}
+    textarea{height:76px;resize:vertical}
+    .wide{grid-column:span 2}
+    .btns{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+    button{border:0;border-radius:7px;padding:9px 14px;font:14px inherit;cursor:pointer;background:var(--primary);color:#fff}
+    button.ok{background:var(--ok)}
+    button.light{background:#e9eef5;color:#111;border:1px solid #c8d2df}
+    .status{margin-top:10px;padding:9px 10px;border-radius:6px;background:#f4f6f8;color:#333;font-size:13px;line-height:1.6;min-height:36px}
+    .status.ok{background:#eef8f1;color:var(--ok)}
+    .status.err{background:#fff0f0;color:var(--danger)}
+    .hint{color:var(--muted);font-size:13px;line-height:1.7;margin-top:8px}
+    .toolbar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:10px}
+    .summary{color:#333;font-size:14px}
+    .register-page{background:#fff;overflow-x:auto;border:1px solid var(--border);margin-bottom:16px}
+    table.register{width:100%;border-collapse:collapse;table-layout:fixed;background:#fff}
+    .register th,.register td{border:1px solid var(--border);text-align:center;vertical-align:middle;padding:5px 4px;font-size:13px;line-height:1.35;word-break:break-all;height:40px}
+    .register td[contenteditable="true"]{background:#fff}
+    .register .title-row th{font-size:24px;font-weight:700;padding:8px 0;border-left:0;border-right:0}
+    .register .lab-row td{height:34px;text-align:left;padding-left:8px}
+    .register .head-row th{background:#f1f1f1;font-weight:600;height:48px}
+    .col-no{width:44px}.col-date{width:84px}.col-power{width:110px}.col-device{width:120px}.col-fire{width:94px}.col-place{width:92px}.col-net{width:94px}.col-action{width:110px}.col-unit{width:110px}.col-done{width:72px}.col-person{width:74px}
+    @media print{body{background:#fff}.page{max-width:none;padding:0}.panel,.toolbar{display:none!important}.register-page{border:0;margin:0;page-break-after:always;break-after:page;overflow:visible}.register-page:last-child{page-break-after:auto;break-after:auto}.register tr{page-break-inside:avoid}.register th,.register td{font-size:12px}.register .title-row th{font-size:22px}@page{size:A4 landscape;margin:10mm}}
+    @media(max-width:980px){.grid{grid-template-columns:repeat(2,minmax(160px,1fr))}.wide{grid-column:span 2}}
+    @media(max-width:560px){.page{padding:12px}.grid{grid-template-columns:1fr}.wide{grid-column:1}}
+  </style>
+</head>
+<body>
+  <div class="page">
+    <section class="panel">
+      <h2>实验室安全检查日志</h2>
+      <div class="grid">
+        <div>
+          <label for="labKey">实验室名称</label>
+          <select id="labKey" onchange="switchLab()">
+            <option value="shuju">数聚实验室（308）</option>
+            <option value="bigdata">大数据实验室（702）</option>
+          </select>
+        </div>
+        <div class="wide">
+          <label for="accessToken">访问令牌</label>
+          <input id="accessToken" type="password" placeholder="由管理员提供">
+        </div>
+        <div class="wide">
+          <label for="extraInspectors">补充检查人姓名</label>
+          <textarea id="extraInspectors" placeholder="填写不在该实验室上课但需要纳入安全检查日志的检查人姓名；多个姓名可用逗号、顿号、空格或换行分隔"></textarea>
+        </div>
+      </div>
+      <div class="btns">
+        <button class="light" onclick="loadUsageRegister()">从使用总台账读取并生成</button>
+        <button onclick="print()">打印 / 另存为PDF</button>
+        <button class="light" onclick="exportCsv()">导出CSV</button>
+      </div>
+      <div id="status" class="status ok">已切换到数聚实验室。</div>
+    </section>
+
+    <div class="toolbar">
+      <div class="summary" id="summary">当前共 0 条安全检查记录。</div>
+    </div>
+
+    <div id="registerPages"></div>
+  </div>
+
+  <script>
+    const OWNER = "wvais";
+    const REPO = "shuju-lab-register";
+    const BRANCH = "main";
+    const PAGE_SIZE = 11;
+
+    const LABS = {
+      shuju: { name: "数聚实验室", room: "308", path: "data/shuju-lab-usage.json" },
+      bigdata: { name: "大数据实验室", room: "702", path: "data/bigdata-lab-usage.json" }
+    };
+
+    const TERMS = {
+      "25-26-1": { start: "2025-09-01", weeks: 16 },
+      "25-26-2": { start: "2026-03-09", weeks: 16 }
+    };
+
+    // 安全检查只在教学期间生成。教学期间按当前课程台账设定：
+    // 25-26-1：2025-09-01 起 16 周；25-26-2：2026-03-09 起 16 周。
+    const TEACHING_PERIODS = Object.values(TERMS).map(term => ({
+      start: term.start,
+      end: formatDate(addDays(term.start, term.weeks * 7 - 1))
+    }));
+
+    // 国家法定节假日默认排除。如学校另有校历安排，可在此处增删日期或日期段。
+    const HOLIDAY_RANGES = [
+      ["2025-10-01", "2025-10-08"],
+      ["2026-01-01", "2026-01-03"],
+      ["2026-02-15", "2026-02-23"],
+      ["2026-04-04", "2026-04-06"],
+      ["2026-05-01", "2026-05-05"],
+      ["2026-06-19", "2026-06-21"]
+    ];
+
+    const HOLIDAY_DATES = new Set(expandDateRanges(HOLIDAY_RANGES));
+
+    const WEEKDAYS = {1:"周一",2:"周二",3:"周三",4:"周四",5:"周五",6:"周六",7:"周日"};
+    let generatedRows = [];
+
+    function $(id){return document.getElementById(id)}
+    function getLabKey(){return $("labKey").value}
+    function getLab(){return LABS[getLabKey()]}
+    function getLabDisplayName(){return `${getLab().name}（${getLab().room}）`}
+
+    function switchLab(){
+      generatedRows = [];
+      renderPages();
+      setStatus(`已切换到${getLab().name}。`, "ok");
+    }
+
+    function setStatus(text, type=""){
+      const el = $("status");
+      el.className = "status" + (type ? ` ${type}` : "");
+      el.textContent = text;
+    }
+
+    function getToken(){return $("accessToken").value.trim()}
+
+    async function loadUsageRegister(){
+      try{
+        if(!getToken()) throw new Error("请填写访问令牌。");
+        setStatus("正在读取使用总台账并生成安全检查日志……");
+        const remote = await getRemoteFile({
+          owner: OWNER,
+          repo: REPO,
+          branch: BRANCH,
+          path: getLab().path,
+          token: getToken()
+        });
+        const rules = normalizeRules(remote.data.rules || []);
+        const classRows = expandClassRows(rules);
+        generatedRows = generateInspectionRows(classRows, getExtraInspectorNames());
+        renderPages();
+        setStatus(`已生成${generatedRows.length}条安全检查记录。已排除寒暑假、非教学期间和法定节假日，日期优先取教师实际上课日期，并尽量错开不同教师检查日期。`, "ok");
+      }catch(error){
+        setStatus(error.message || String(error), "err");
+      }
+    }
+
+    async function getRemoteFile(config){
+      const url = `https://api.github.com/repos/${encodeURIComponent(config.owner)}/${encodeURIComponent(config.repo)}/contents/${encodePath(config.path)}?ref=${encodeURIComponent(config.branch)}`;
+      const response = await fetch(url, { headers: apiHeaders(config.token) });
+      if(response.status === 404) throw new Error("未找到对应实验室的使用总台账数据文件。");
+      if(!response.ok) throw new Error(`读取使用总台账失败：HTTP ${response.status} ${await safeReadText(response)}`);
+      const file = await response.json();
+      const text = base64ToUtf8(String(file.content || "").replace(/\n/g,""));
+      try{
+        return { sha:file.sha, data:JSON.parse(text) };
+      }catch(e){
+        throw new Error("使用总台账数据文件不是有效JSON，请检查文件内容。");
+      }
+    }
+
+    function apiHeaders(token){
+      return {"Accept":"application/vnd.github+json","Authorization":`Bearer ${token}`};
+    }
+
+    function encodePath(path){
+      return path.split("/").map(encodeURIComponent).join("/");
+    }
+
+    function normalizeRules(list){
+      return (list || []).map(item => {
+        const term = TERMS[item.term] ? item.term : "25-26-1";
+        const labKey = LABS[item.labKey] ? item.labKey : getLabKey();
+        return {
+          ...item,
+          labKey,
+          labName: LABS[labKey].name,
+          term,
+          startDate: item.startDate || TERMS[term].start,
+          maxWeek: Number(item.maxWeek || TERMS[term].weeks),
+          weekdays: (item.weekdays || []).map(Number).filter(n => n >= 1 && n <= 7),
+          weeks: (item.weeks || []).map(Number).filter(n => n >= 1)
+        };
+      });
+    }
+
+    function expandClassRows(rules){
+      const map = new Map();
+      rules.forEach(rule => {
+        rule.weeks.forEach(week => {
+          rule.weekdays.forEach(day => {
+            const offset = (week - 1) * 7 + (day - 1);
+            const date = formatDate(addDays(rule.startDate, offset));
+            const key = [date, rule.teacher, rule.course, rule.className, rule.periods].join("|");
+            map.set(key, {
+              date,
+              teacher: rule.teacher || "",
+              course: rule.course || "",
+              className: rule.className || "",
+              periods: rule.periods || "",
+              term: rule.term || "",
+              weekday: WEEKDAYS[day] || ""
+            });
+          });
+        });
+      });
+      return Array.from(map.values()).sort((a,b) => [a.date,a.teacher,a.className].join("|").localeCompare([b.date,b.teacher,b.className].join("|"), "zh-CN"));
+    }
+
+    function generateInspectionRows(classRows, extraInspectors = []){
+      const eligibleClassRows = classRows.filter(row => isEligibleInspectionDate(row.date));
+      const byTeacher = new Map();
+      eligibleClassRows.forEach(row => {
+        const teacher = row.teacher || "未填写";
+        if(!byTeacher.has(teacher)) byTeacher.set(teacher, []);
+        byTeacher.get(teacher).push(row);
+      });
+
+      extraInspectors.forEach(name => {
+        if(!byTeacher.has(name)) byTeacher.set(name, []);
+      });
+      const extraInspectorSet = new Set(extraInspectors);
+
+      const periods = buildTeachingHalfMonthPeriods();
+      const usedDateCount = new Map();
+      const rows = [];
+
+      Array.from(byTeacher.keys()).sort((a,b)=>a.localeCompare(b,"zh-CN")).forEach(teacher => {
+        const teacherRows = (byTeacher.get(teacher) || []).sort((a,b)=>a.date.localeCompare(b.date));
+        const isExtraInspector = extraInspectorSet.has(teacher) && !teacherRows.length;
+        periods.forEach(period => {
+          let candidates = teacherRows.filter(row => row.date >= period.start && row.date <= period.end);
+          if(!candidates.length && isExtraInspector){
+            candidates = eligibleClassRows.filter(row => row.date >= period.start && row.date <= period.end);
+          }
+          if(!candidates.length && isExtraInspector){
+            candidates = fallbackInspectionRows(period, teacher);
+          }
+          if(!candidates.length) return;
+          const chosen = chooseBalancedDate(candidates, usedDateCount);
+          usedDateCount.set(chosen.date, (usedDateCount.get(chosen.date) || 0) + 1);
+          rows.push({
+            id: hashString([teacher, period.start, period.end, chosen.date].join("|")),
+            date: chosen.date,
+            power: "正常",
+            device: "正常",
+            fire: "正常",
+            place: "正常",
+            network: "正常",
+            action: "无",
+            unit: "无",
+            done: "正常",
+            person: teacher
+          });
+        });
+      });
+
+      return rows.sort((a,b)=>[a.date,a.person].join("|").localeCompare([b.date,b.person].join("|"),"zh-CN"));
+    }
+
+    function getExtraInspectorNames(){
+      return parseNameList($("extraInspectors") ? $("extraInspectors").value : "");
+    }
+
+    function parseNameList(text){
+      return Array.from(new Set(String(text || "")
+        .normalize("NFKC")
+        .split(/[、,，;；\s]+/)
+        .map(name => name.trim())
+        .filter(Boolean)));
+    }
+
+    function fallbackInspectionRows(period, teacher){
+      const rows = [];
+      let date = new Date(period.start + "T00:00:00");
+      const end = new Date(period.end + "T00:00:00");
+      while(date <= end){
+        const value = formatDate(date);
+        const day = date.getDay();
+        if(day !== 0 && day !== 6 && isEligibleInspectionDate(value)){
+          rows.push({ date: value, teacher, className: "", course: "", periods: "" });
+        }
+        date.setDate(date.getDate() + 1);
+      }
+      return rows;
+    }
+
+    function buildTeachingHalfMonthPeriods(){
+      const periods = [];
+      TEACHING_PERIODS.forEach(term => {
+        periods.push(...buildHalfMonthPeriods(term.start, term.end));
+      });
+      return periods;
+    }
+
+    function buildHalfMonthPeriods(startDate, endDate){
+      const periods = [];
+      const start = new Date(startDate + "T00:00:00");
+      const end = new Date(endDate + "T00:00:00");
+      let d = new Date(start.getFullYear(), start.getMonth(), 1);
+
+      while(d <= end){
+        const y = d.getFullYear();
+        const m = d.getMonth();
+        const firstHalfStart = maxDate(new Date(y, m, 1), start);
+        const firstHalfEnd = minDate(new Date(y, m, 15), end);
+        const secondHalfStart = maxDate(new Date(y, m, 16), start);
+        const secondHalfEnd = minDate(new Date(y, m + 1, 0), end);
+
+        if(firstHalfStart <= firstHalfEnd) periods.push({ start: formatDate(firstHalfStart), end: formatDate(firstHalfEnd) });
+        if(secondHalfStart <= secondHalfEnd) periods.push({ start: formatDate(secondHalfStart), end: formatDate(secondHalfEnd) });
+
+        d = new Date(y, m + 1, 1);
+      }
+      return periods;
+    }
+
+    function isEligibleInspectionDate(dateString){
+      return isTeachingDate(dateString) && !HOLIDAY_DATES.has(dateString);
+    }
+
+    function isTeachingDate(dateString){
+      return TEACHING_PERIODS.some(period => dateString >= period.start && dateString <= period.end);
+    }
+
+    function expandDateRanges(ranges){
+      const dates = [];
+      ranges.forEach(([start, end]) => {
+        let d = new Date(start + "T00:00:00");
+        const last = new Date(end + "T00:00:00");
+        while(d <= last){
+          dates.push(formatDate(d));
+          d.setDate(d.getDate() + 1);
+        }
+      });
+      return dates;
+    }
+
+    function maxDate(a, b){ return a > b ? a : b; }
+    function minDate(a, b){ return a < b ? a : b; }
+
+    function chooseBalancedDate(candidates, usedDateCount){
+      const byDate = new Map();
+      candidates.forEach(row => {
+        if(!byDate.has(row.date)) byDate.set(row.date, row);
+      });
+      return Array.from(byDate.values()).sort((a,b) => {
+        const ca = usedDateCount.get(a.date) || 0;
+        const cb = usedDateCount.get(b.date) || 0;
+        if(ca !== cb) return ca - cb;
+        return a.date.localeCompare(b.date);
+      })[0];
+    }
+
+    function renderPages(){
+      const pageCount = Math.max(1, Math.ceil(generatedRows.length / PAGE_SIZE));
+      let html = "";
+      for(let pageIndex = 0; pageIndex < pageCount; pageIndex++){
+        const pageRows = generatedRows.slice(pageIndex * PAGE_SIZE, pageIndex * PAGE_SIZE + PAGE_SIZE);
+        html += createRegisterTable(pageRows, pageIndex * PAGE_SIZE);
+      }
+      $("registerPages").innerHTML = html;
+      $("summary").textContent = `当前共 ${generatedRows.length} 条安全检查记录。`;
+    }
+
+    function createRegisterTable(pageRows, startIndex){
+      let body = "";
+      for(let i = 0; i < PAGE_SIZE; i++){
+        const row = pageRows[i];
+        if(row){
+          body += `<tr data-row="1">
+            <td>${startIndex + i + 1}</td>
+            <td contenteditable="true">${escapeHtml(row.date)}</td>
+            <td contenteditable="true">${escapeHtml(row.power)}</td>
+            <td contenteditable="true">${escapeHtml(row.device)}</td>
+            <td contenteditable="true">${escapeHtml(row.fire)}</td>
+            <td contenteditable="true">${escapeHtml(row.place)}</td>
+            <td contenteditable="true">${escapeHtml(row.network)}</td>
+            <td contenteditable="true">${escapeHtml(row.action)}</td>
+            <td contenteditable="true">${escapeHtml(row.unit)}</td>
+            <td contenteditable="true">${escapeHtml(row.done)}</td>
+            <td contenteditable="true">${escapeHtml(row.person)}</td>
+          </tr>`;
+        }else{
+          body += `<tr><td>&nbsp;</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>`;
+        }
+      }
+      return `<div class="register-page"><table class="register">
+        <thead>
+          <tr class="title-row"><th colspan="11">实验室安全检查日志</th></tr>
+          <tr class="lab-row"><td colspan="11">实验室名称：${escapeHtml(getLabDisplayName())}</td></tr>
+          <tr class="head-row">
+            <th class="col-no">序号</th>
+            <th class="col-date">检查日期</th>
+            <th class="col-power">用电</th>
+            <th class="col-device">设备</th>
+            <th class="col-fire">消防设施</th>
+            <th class="col-place">场地</th>
+            <th class="col-net">网络</th>
+            <th class="col-action">整改措施</th>
+            <th class="col-unit">整改<br>责任单位</th>
+            <th class="col-done">整改完成<br>情况</th>
+            <th class="col-person">检查人</th>
+          </tr>
+        </thead>
+        <tbody>${body}</tbody>
+      </table></div>`;
+    }
+
+    function exportCsv(){
+      const headers = ["序号","实验室名称","检查日期","用电","设备","消防设施","场地","网络","整改措施","整改责任单位","整改完成情况","检查人"];
+      const data = [];
+      document.querySelectorAll("tr[data-row='1']").forEach((tr, index) => {
+        const cells = Array.from(tr.children).map(td => td.textContent.trim());
+        data.push([index + 1, getLabDisplayName(), ...cells.slice(1)]);
+      });
+      const csv = [headers, ...data].map(row => row.map(csvCell).join(",")).join("\n");
+      downloadBlob(`${getLabDisplayName()}安全检查日志.csv`, "\uFEFF" + csv, "text/csv;charset=utf-8");
+    }
+
+    function addDays(dateString, days){
+      const date = new Date(dateString + "T00:00:00");
+      date.setDate(date.getDate() + days);
+      return date;
+    }
+
+    function formatDate(date){
+      return date.getFullYear() + "-" + String(date.getMonth() + 1).padStart(2,"0") + "-" + String(date.getDate()).padStart(2,"0");
+    }
+
+    async function safeReadText(response){
+      try{
+        const data = await response.json();
+        return data.message ? `- ${data.message}` : JSON.stringify(data).slice(0,200);
+      }catch(e){
+        try{return (await response.text()).slice(0,200)}catch(_){return ""}
+      }
+    }
+
+    function base64ToUtf8(base64){
+      const binary = atob(base64);
+      const bytes = new Uint8Array(binary.length);
+      for(let i=0;i<binary.length;i++) bytes[i] = binary.charCodeAt(i);
+      return new TextDecoder().decode(bytes);
+    }
+
+    function hashString(str){
+      let hash = 2166136261;
+      for(let i=0;i<str.length;i++){
+        hash ^= str.charCodeAt(i);
+        hash += (hash << 1) + (hash << 4) + (hash << 7) + (hash << 8) + (hash << 24);
+      }
+      return (hash >>> 0).toString(36);
+    }
+
+    function downloadBlob(filename, content, type){
+      const blob = new Blob([content], {type});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    }
+
+    function csvCell(value){return `"${String(value ?? "").replace(/"/g,'""')}"`}
+    function escapeHtml(value){
+      return String(value ?? "")
+        .replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;").replace(/'/g,"&#039;");
+    }
+
+    renderPages();
+  </script>
+</body>
+</html>
