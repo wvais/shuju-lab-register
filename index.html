@@ -1,0 +1,849 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>实验室使用情况登记台账</title>
+  <style>
+    :root{--border:#111;--bg:#f6f7f9;--card:#fff;--text:#111;--muted:#666;--primary:#1f4e79;--ok:#1f7a3f;--danger:#9b1c1c}
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--bg);font-family:"Microsoft YaHei",SimSun,Arial,sans-serif;color:var(--text)}
+    .page{max-width:1320px;margin:0 auto;padding:24px}
+    .panel{background:var(--card);border:1px solid #ddd;border-radius:10px;padding:18px;margin-bottom:18px;box-shadow:0 3px 12px rgba(0,0,0,.04)}
+    .panel h2{margin:0 0 14px;font-size:20px;color:var(--primary)}
+    .grid{display:grid;grid-template-columns:repeat(4,minmax(180px,1fr));gap:12px 14px}
+    label{display:block;font-size:14px;margin-bottom:5px;color:#222}
+    input,select{width:100%;height:38px;border:1px solid #bbb;border-radius:6px;padding:7px 9px;font:14px inherit;background:#fff}
+    .wide{grid-column:span 2}
+    .checks{display:flex;flex-wrap:wrap;gap:8px 14px;min-height:38px;align-items:center;padding:6px 0}
+    .checks label{display:inline-flex;align-items:center;gap:4px;margin:0;white-space:nowrap}
+    .checks input{width:auto;height:auto}
+    .btns{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+    button{border:0;border-radius:7px;padding:9px 14px;font:14px inherit;cursor:pointer;background:var(--primary);color:#fff}
+    button.ok{background:var(--ok)}
+    button.danger{background:var(--danger)}
+    button.gray{background:#666}
+    button.light{background:#e9eef5;color:#111;border:1px solid #c8d2df}
+    button:disabled{opacity:.55;cursor:not-allowed}
+    .status{margin-top:10px;padding:9px 10px;border-radius:6px;background:#f4f6f8;color:#333;font-size:13px;line-height:1.6;min-height:36px}
+    .status.ok{background:#eef8f1;color:var(--ok)}
+    .status.err{background:#fff0f0;color:var(--danger)}
+    .hint{color:var(--muted);font-size:13px;line-height:1.7;margin-top:8px}
+    .toolbar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:10px}
+    .summary{color:#333;font-size:14px}
+    .register-page{background:#fff;overflow-x:auto;border:1px solid var(--border);margin-bottom:16px}
+    table.register{width:100%;border-collapse:collapse;table-layout:fixed;background:#fff}
+    .register th,.register td{border:1px solid var(--border);text-align:center;vertical-align:middle;padding:5px 4px;font-size:13px;line-height:1.35;word-break:break-all;height:40px}
+    .register .title-row th{font-size:24px;font-weight:700;padding:8px 0;border-left:0;border-right:0}
+    .register .lab-row td{height:34px;text-align:left;padding-left:8px}
+    .register .head-row th{background:#f1f1f1;font-weight:600;height:48px}
+    .col-no{width:46px}.col-date{width:82px}.col-time{width:98px}.col-class{width:110px}.col-course{width:130px}.col-teacher{width:105px}.col-device{width:130px}.col-safe{width:115px}.col-close{width:105px}.col-sign{width:120px}
+    .records{width:100%;border-collapse:collapse;margin-top:10px}
+    .records th,.records td{border:1px solid #ddd;padding:7px;font-size:13px;text-align:center}
+    .records th{background:#f3f6fa}
+    @media print{body{background:#fff}.page{max-width:none;padding:0}.panel,.toolbar,.records-panel{display:none!important}.register-page{border:0;margin:0;page-break-after:always;break-after:page;overflow:visible}.register-page:last-child{page-break-after:auto;break-after:auto}.register tr{page-break-inside:avoid}.register th,.register td{font-size:12px}.register .title-row th{font-size:22px}@page{size:A4 landscape;margin:10mm}}
+    @media(max-width:980px){.grid{grid-template-columns:repeat(2,minmax(160px,1fr))}.wide{grid-column:span 2}}
+    @media(max-width:560px){.page{padding:12px}.grid{grid-template-columns:1fr}.wide{grid-column:1}}
+  </style>
+</head>
+<body>
+  <div class="page">
+    <section class="panel">
+      <h2>课程使用信息录入</h2>
+      <div class="grid">
+        <div>
+          <label for="labKey">实验室名称</label>
+          <select id="labKey" onchange="switchLab()">
+            <option value="shuju">数聚实验室（308）</option>
+            <option value="bigdata">大数据实验室（702）</option>
+          </select>
+        </div>
+        <div>
+          <label for="term">学期</label>
+          <select id="term" onchange="syncTerm()">
+            <option value="25-26-1">25-26-1</option>
+            <option value="25-26-2">25-26-2</option>
+          </select>
+        </div>
+        <input id="startDate" type="hidden">
+        <input id="maxWeek" type="hidden">
+
+        <div>
+          <label for="teacher">负责教师</label>
+          <input id="teacher" placeholder="请输入教师姓名">
+        </div>
+        <div>
+          <label for="course">课程名称</label>
+          <input id="course" placeholder="请输入课程名称">
+        </div>
+        <div>
+          <label for="className">使用班级</label>
+          <input id="className" placeholder="例如：23级大数据1班">
+        </div>
+        <div>
+          <label for="signName">登记人签字</label>
+          <input id="signName" placeholder="默认与负责教师一致，可更改">
+        </div>
+
+        <div class="wide">
+          <label>上课星期</label>
+          <div class="checks" id="weekdayChecks">
+            <label><input type="checkbox" value="1">周一</label>
+            <label><input type="checkbox" value="2">周二</label>
+            <label><input type="checkbox" value="3">周三</label>
+            <label><input type="checkbox" value="4">周四</label>
+            <label><input type="checkbox" value="5">周五</label>
+            <label><input type="checkbox" value="6">周六</label>
+            <label><input type="checkbox" value="7">周日</label>
+          </div>
+        </div>
+        <div>
+          <label for="periods">上课节次</label>
+          <select id="periods">
+            <option value="">请选择上课节次</option>
+            <option value="1-2节">1-2节</option>
+            <option value="3-4节">3-4节</option>
+            <option value="5-6节">5-6节</option>
+            <option value="7-8节">7-8节</option>
+            <option value="9-10节">9-10节</option>
+          </select>
+        </div>
+        <div>
+          <label for="weekMode">周次类型</label>
+          <select id="weekMode" onchange="syncWeekMode()">
+            <option value="all">每周</option>
+            <option value="odd">单周</option>
+            <option value="even">双周</option>
+            <option value="custom">自定义周次</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="weekStart">开始周</label>
+          <input id="weekStart" type="number" min="1" value="1">
+        </div>
+        <div>
+          <label for="weekEnd">结束周</label>
+          <input id="weekEnd" type="number" min="1" value="16">
+        </div>
+        <div class="wide">
+          <label for="customWeeks">自定义周次</label>
+          <input id="customWeeks" placeholder="如：1,3,5,8-12,16">
+        </div>
+
+        <div>
+          <label for="deviceStatus">设备、用电运行状态</label>
+          <select id="deviceStatus">
+            <option value="正常">正常</option>
+            <option value="异常，已报修">异常，已报修</option>
+            <option value="">留空</option>
+          </select>
+        </div>
+        <div>
+          <label for="safetyStatus">有无安全异常</label>
+          <select id="safetyStatus">
+            <option value="无">无</option>
+            <option value="有，已处置">有，已处置</option>
+            <option value="">留空</option>
+          </select>
+        </div>
+      </div>
+      <div class="btns">
+        <button onclick="addSchedule()">添加到台账</button>
+        <button class="light" onclick="clearForm()">清空填写信息</button>
+        <button class="danger" onclick="clearAll()">清空当前台账</button>
+      </div>
+      <div id="pageStatus" class="status ok">已切换到数聚实验室。</div>
+    </section>
+
+    <section class="panel">
+      <h2>总台账同步设置</h2>
+      <div class="grid">
+        <div class="wide">
+          <label for="accessToken">访问令牌</label>
+          <input id="accessToken" type="password" placeholder="由管理员提供">
+        </div>
+      </div>
+      <div class="btns">
+        <button class="light" onclick="loadFromRegister()">从总台账读取</button>
+        <button class="ok" onclick="syncToRegister()">合并保存到总台账</button>
+      </div>
+      <div id="cloudStatus" class="status">未连接总台账。</div>
+    </section>
+
+    <section class="panel records-panel">
+      <h2>已录入课程规则</h2>
+      <div id="ruleList" class="hint">暂无录入。</div>
+    </section>
+
+    <div class="toolbar">
+      <div class="summary" id="summary">当前共 0 条使用记录，已录入 0 条课程规则。</div>
+      <div class="btns" style="margin:0">
+        <button onclick="print()">打印 / 另存为PDF</button>
+        <button class="light" onclick="exportCsv()">导出CSV</button>
+      </div>
+    </div>
+
+    <div id="registerPages"></div>
+  </div>
+
+  <script>
+    const OWNER = "wvais";
+    const REPO = "shuju-lab-register";
+    const BRANCH = "main";
+    const CLOSE_STATUS = "正常";
+    const PAGE_SIZE = 11;
+
+    const LABS = {
+      shuju: { name: "数聚实验室", room: "308", path: "data/shuju-lab-usage.json" },
+      bigdata: { name: "大数据实验室", room: "702", path: "data/bigdata-lab-usage.json" }
+    };
+
+    const TERMS = {
+      "25-26-1": { start: "2025-09-01", weeks: 16 },
+      "25-26-2": { start: "2026-03-09", weeks: 16 }
+    };
+
+    const WEEKDAYS = {
+      1: "周一",
+      2: "周二",
+      3: "周三",
+      4: "周四",
+      5: "周五",
+      6: "周六",
+      7: "周日"
+    };
+
+    let rulesByLab = { shuju: [], bigdata: [] };
+    let pendingRuleIdsByLab = { shuju: new Set(), bigdata: new Set() };
+    let rules = [];
+    let rows = [];
+    let currentLabKey = "shuju";
+    let signNameTouched = false;
+
+    function $(id) { return document.getElementById(id); }
+    function getLabKey() { return $("labKey").value; }
+    function getLab() { return LABS[getLabKey()]; }
+    function getLabName() { return getLab().name; }
+    function getLabDisplayName() { return `${getLab().name}（${getLab().room}）`; }
+
+    function syncTerm() {
+      const config = TERMS[$("term").value];
+      $("startDate").value = config.start;
+      $("maxWeek").value = config.weeks;
+      $("weekStart").value = 1;
+      $("weekEnd").value = config.weeks;
+      $("weekStart").max = config.weeks;
+      $("weekEnd").max = config.weeks;
+    }
+
+    function syncWeekMode() {
+      const custom = $("weekMode").value === "custom";
+      $("customWeeks").disabled = !custom;
+      if (!custom) $("customWeeks").value = "";
+    }
+
+    function switchLab() {
+      rulesByLab[currentLabKey] = rules;
+      currentLabKey = getLabKey();
+      rules = normalizeRules(rulesByLab[currentLabKey] || []);
+      renderAll();
+      setPageStatus(`已切换到${getLabName()}。`, "ok");
+      setCloudStatus("未连接总台账。");
+    }
+
+    function setPageStatus(text, type = "") {
+      const el = $("pageStatus");
+      el.className = "status" + (type ? ` ${type}` : "");
+      el.textContent = text;
+    }
+
+    function setCloudStatus(text, type = "") {
+      const el = $("cloudStatus");
+      el.className = "status" + (type ? ` ${type}` : "");
+      el.textContent = text;
+    }
+
+    function checkedWeekdays() {
+      return Array.from(document.querySelectorAll("#weekdayChecks input:checked")).map(item => Number(item.value));
+    }
+
+    function normalizeWeekText(text) {
+      return String(text || "")
+        .normalize("NFKC")
+        .replace(/[，、；;\s]+/g, ",")
+        .replace(/[—–－~～至]/g, "-");
+    }
+
+    function parseCustomWeeks(text, maxWeek) {
+      const set = new Set();
+      const normalized = normalizeWeekText(text);
+      if (!normalized.trim()) return [];
+      normalized.split(",").forEach(part => {
+        const item = part.trim();
+        if (!item) return;
+        if (item.includes("-")) {
+          const [a, b] = item.split("-").map(value => Number(value.trim()));
+          if (!Number.isInteger(a) || !Number.isInteger(b)) return;
+          for (let i = Math.min(a, b); i <= Math.max(a, b); i++) {
+            if (i >= 1 && i <= maxWeek) set.add(i);
+          }
+        } else {
+          const n = Number(item);
+          if (Number.isInteger(n) && n >= 1 && n <= maxWeek) set.add(n);
+        }
+      });
+      return Array.from(set).sort((a, b) => a - b);
+    }
+
+    function selectedWeeks() {
+      const maxWeek = Number($("maxWeek").value || 16);
+      const mode = $("weekMode").value;
+      if (mode === "custom") return parseCustomWeeks($("customWeeks").value, maxWeek);
+      const start = Math.max(1, Number($("weekStart").value));
+      const end = Math.min(maxWeek, Number($("weekEnd").value));
+      const list = [];
+      for (let week = start; week <= end; week++) {
+        if (mode === "odd" && week % 2 !== 1) continue;
+        if (mode === "even" && week % 2 !== 0) continue;
+        list.push(week);
+      }
+      return list;
+    }
+
+    function addSchedule(options = {}) {
+      const rule = {
+        id: "",
+        labKey: getLabKey(),
+        labName: getLabName(),
+        term: $("term").value,
+        startDate: $("startDate").value,
+        maxWeek: Number($("maxWeek").value),
+        teacher: $("teacher").value.trim(),
+        course: $("course").value.trim(),
+        className: $("className").value.trim(),
+        signName: $("signName").value.trim(),
+        weekdays: checkedWeekdays(),
+        periods: $("periods").value.trim(),
+        weekMode: $("weekMode").value,
+        weeks: selectedWeeks(),
+        deviceStatus: $("deviceStatus").value,
+        safetyStatus: $("safetyStatus").value,
+        closeStatus: CLOSE_STATUS,
+        createdAt: new Date().toISOString()
+      };
+
+      if (!rule.teacher) return alert("请填写负责教师。");
+      if (!rule.course) return alert("请填写课程名称。");
+      if (!rule.className) return alert("请填写使用班级。");
+      if (!rule.periods) return alert("请选择上课节次。");
+      if (!rule.weekdays.length) return alert("请选择上课星期。");
+      if (!rule.weeks.length) return alert("请选择有效周次。");
+
+      if (!rule.signName) rule.signName = rule.teacher;
+      rule.id = makeRuleId(rule);
+      rules.push(rule);
+      pendingRuleIdsByLab[getLabKey()].add(rule.id);
+      rulesByLab[getLabKey()] = rules;
+      renderAll();
+      setPageStatus("已添加到台账。", "ok");
+      return rule;
+    }
+
+    function normalizeRules(list) {
+      return (list || []).map(item => {
+        const term = TERMS[item.term] ? item.term : "25-26-1";
+        const labKey = LABS[item.labKey] ? item.labKey : getLabKey();
+        const rule = {
+          ...item,
+          labKey,
+          labName: LABS[labKey].name,
+          term,
+          startDate: item.startDate || TERMS[term].start,
+          maxWeek: Number(item.maxWeek || TERMS[term].weeks),
+          closeStatus: CLOSE_STATUS,
+          weekdays: (item.weekdays || []).map(Number).filter(n => n >= 1 && n <= 7),
+          weeks: (item.weeks || []).map(Number).filter(n => n >= 1),
+          createdAt: item.createdAt || new Date().toISOString()
+        };
+        if (!rule.id) rule.id = makeRuleId(rule);
+        return rule;
+      });
+    }
+
+    function rebuildRows() {
+      rules = normalizeRules(rules);
+      rulesByLab[getLabKey()] = rules;
+      rows = [];
+      rules.forEach(rule => {
+        rule.weeks.forEach(week => {
+          rule.weekdays.forEach(day => {
+            const offset = (week - 1) * 7 + (day - 1);
+            const date = formatDate(addDays(rule.startDate, offset));
+            rows.push({
+              ...rule,
+              week,
+              date,
+              weekday: WEEKDAYS[day],
+              sortKey: `${rule.term}-${date}-${rule.periods}-${rule.teacher}`
+            });
+          });
+        });
+      });
+      rows.sort((a, b) => a.sortKey.localeCompare(b.sortKey, "zh-CN"));
+    }
+
+    function renderAll() {
+      rebuildRows();
+      renderRegisterPages();
+      renderRules();
+      $("summary").textContent = `当前共 ${rows.length} 条使用记录，已录入 ${rules.length} 条课程规则。`;
+    }
+
+    function renderRegisterPages() {
+      const pageCount = Math.max(1, Math.ceil(rows.length / PAGE_SIZE));
+      let html = "";
+      for (let pageIndex = 0; pageIndex < pageCount; pageIndex++) {
+        const pageRows = rows.slice(pageIndex * PAGE_SIZE, pageIndex * PAGE_SIZE + PAGE_SIZE);
+        html += createRegisterTable(pageRows, pageIndex * PAGE_SIZE);
+      }
+      $("registerPages").innerHTML = html;
+    }
+
+    function createRegisterTable(pageRows, startIndex) {
+      let body = "";
+      for (let i = 0; i < PAGE_SIZE; i++) {
+        const row = pageRows[i];
+        if (row) {
+          body += `<tr>
+            <td>${startIndex + i + 1}</td>
+            <td>${row.date}<br>${row.weekday}</td>
+            <td>${escapeHtml(row.periods)}</td>
+            <td>${escapeHtml(row.className)}</td>
+            <td>${escapeHtml(row.course)}</td>
+            <td>${escapeHtml(row.teacher)}</td>
+            <td>${escapeHtml(row.deviceStatus)}</td>
+            <td>${escapeHtml(row.safetyStatus)}</td>
+            <td>${escapeHtml(row.closeStatus)}</td>
+            <td>${escapeHtml(row.signName)}</td>
+          </tr>`;
+        } else {
+          body += "<tr><td>&nbsp;</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>";
+        }
+      }
+
+      return `<div class="register-page"><table class="register">
+        <thead>
+          <tr class="title-row"><th colspan="10">实验室使用情况登记台账</th></tr>
+          <tr class="lab-row"><td colspan="10">实验室名称：${escapeHtml(getLabDisplayName())}</td></tr>
+          <tr class="head-row">
+            <th class="col-no">序号</th>
+            <th class="col-date">使用日期</th>
+            <th class="col-time">使用节次</th>
+            <th class="col-class">使用班级</th>
+            <th class="col-course">课程名称</th>
+            <th class="col-teacher">负责教师</th>
+            <th class="col-device">设备、用电运行状态</th>
+            <th class="col-safe">有无安全异常</th>
+            <th class="col-close">课后安全收尾情况</th>
+            <th class="col-sign">登记人签字</th>
+          </tr>
+        </thead>
+        <tbody>${body}</tbody>
+      </table></div>`;
+    }
+
+    function renderRules() {
+      if (!rules.length) {
+        $("ruleList").textContent = "暂无录入。";
+        return;
+      }
+      $("ruleList").innerHTML = `<table class="records">
+        <thead>
+          <tr>
+            <th>序号</th>
+            <th>实验室</th>
+            <th>学期</th>
+            <th>教师</th>
+            <th>课程</th>
+            <th>班级</th>
+            <th>星期</th>
+            <th>节次</th>
+            <th>周次</th>
+            <th>提交人</th>
+            <th>提交时间</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${rules.map((rule, index) => `<tr>
+            <td>${index + 1}</td>
+            <td>${escapeHtml(LABS[rule.labKey]?.name ? `${LABS[rule.labKey].name}（${LABS[rule.labKey].room}）` : rule.labName)}</td>
+            <td>${escapeHtml(rule.term)}</td>
+            <td>${escapeHtml(rule.teacher)}</td>
+            <td>${escapeHtml(rule.course)}</td>
+            <td>${escapeHtml(rule.className)}</td>
+            <td>${rule.weekdays.map(day => WEEKDAYS[day]).join("、")}</td>
+            <td>${escapeHtml(rule.periods)}</td>
+            <td>第${weekText(rule.weeks)}周</td>
+            <td>${escapeHtml(rule.submittedBy || "未提交")}</td>
+            <td>${escapeHtml(rule.submittedAt ? formatDateTimeLocal(rule.submittedAt) : "未提交")}</td>
+            <td><button class="danger" style="padding:5px 9px" onclick="deleteRule('${rule.id}')">删除</button></td>
+          </tr>`).join("")}
+        </tbody>
+      </table>`;
+    }
+
+    function deleteRule(id) {
+      rules = rules.filter(rule => rule.id !== id);
+      pendingRuleIdsByLab[getLabKey()].delete(id);
+      rulesByLab[getLabKey()] = rules;
+      renderAll();
+      setPageStatus("已删除该课程规则。", "ok");
+    }
+
+    function clearForm() {
+      ["teacher", "course", "className", "signName", "customWeeks"].forEach(id => $(id).value = "");
+      $("periods").value = "";
+      signNameTouched = false;
+      document.querySelectorAll("#weekdayChecks input").forEach(item => item.checked = false);
+    }
+
+    function clearAll() {
+      if (!confirm(`确定清空“${getLabName()}”当前页面中的全部台账记录吗？`)) return;
+      rules = [];
+      rows = [];
+      rulesByLab[getLabKey()] = [];
+      pendingRuleIdsByLab[getLabKey()].clear();
+      renderAll();
+      setPageStatus("已清空当前台账。", "ok");
+    }
+
+    function getToken() {
+      return $("accessToken").value.trim();
+    }
+
+    function getCloudConfig() {
+      return {
+        owner: OWNER,
+        repo: REPO,
+        branch: BRANCH,
+        path: getLab().path,
+        token: getToken()
+      };
+    }
+
+    function validateCloudConfig(config) {
+      if (!config.token) throw new Error("请填写访问令牌。");
+    }
+
+    function apiHeaders(token) {
+      return {
+        "Accept": "application/vnd.github+json",
+        "Authorization": `Bearer ${token}`
+      };
+    }
+
+    function encodePath(path) {
+      return path.split("/").map(encodeURIComponent).join("/");
+    }
+
+    async function getRemoteFile(config) {
+      const url = `https://api.github.com/repos/${encodeURIComponent(config.owner)}/${encodeURIComponent(config.repo)}/contents/${encodePath(config.path)}?ref=${encodeURIComponent(config.branch)}`;
+      const response = await fetch(url, { headers: apiHeaders(config.token) });
+      if (response.status === 404) return { sha: null, data: { version: 1, rules: [] } };
+      if (!response.ok) throw new Error(`读取总台账失败：HTTP ${response.status} ${await safeReadText(response)}`);
+      const file = await response.json();
+      const text = base64ToUtf8(String(file.content || "").replace(/\n/g, ""));
+      try {
+        return { sha: file.sha, data: JSON.parse(text) };
+      } catch (e) {
+        throw new Error("总台账数据文件不是有效JSON，请检查文件内容。");
+      }
+    }
+
+    async function putRemoteFile(config, payload, sha, commitInfo = {}) {
+      const url = `https://api.github.com/repos/${encodeURIComponent(config.owner)}/${encodeURIComponent(config.repo)}/contents/${encodePath(config.path)}`;
+      const body = {
+        message: commitInfo.message || `更新${getLabName()}台账 ${new Date().toLocaleString("zh-CN")}`,
+        content: utf8ToBase64(JSON.stringify(payload, null, 2)),
+        branch: config.branch
+      };
+      if (sha) body.sha = sha;
+      const response = await fetch(url, {
+        method: "PUT",
+        headers: apiHeaders(config.token),
+        body: JSON.stringify(body)
+      });
+      if (response.status === 409) throw new Error("CONFLICT");
+      if (!response.ok) throw new Error(`保存总台账失败：HTTP ${response.status} ${await safeReadText(response)}`);
+      return await response.json();
+    }
+
+    async function loadFromRegister() {
+      try {
+        const config = getCloudConfig();
+        validateCloudConfig(config);
+        setCloudStatus("正在读取总台账……");
+        const remote = await getRemoteFile(config);
+        rules = normalizeRules(remote.data.rules || []);
+        rulesByLab[getLabKey()] = rules;
+        pendingRuleIdsByLab[getLabKey()].clear();
+        renderAll();
+        setCloudStatus(`已读取总台账：${rules.length} 条课程规则。`, "ok");
+      } catch (error) {
+        setCloudStatus(error.message || String(error), "err");
+      }
+    }
+
+    async function syncToRegister(showAlert = true) {
+      try {
+        const config = getCloudConfig();
+        validateCloudConfig(config);
+        if (!rules.length) {
+          alert("当前页面暂无课程规则，请先添加到台账。之后再合并保存到总台账。");
+          return;
+        }
+
+        const submittedAtDate = new Date();
+        const submittedAt = submittedAtDate.toISOString();
+        const submittedAtText = formatDateTimeLocal(submittedAtDate);
+        const pendingRules = getPendingRules();
+        const submitRules = pendingRules.length ? pendingRules : rules;
+        const submittedBy = getSubmitterNames(submitRules);
+        const submitCount = submitRules.length;
+
+        if (showAlert) {
+          const ok = confirm(`当前填报的是${getLab().name}(${getLab().room})的课程。\n提交人：${submittedBy}\n提交时间：${submittedAtText}\n本次提交课程规则：${submitCount} 条\n请确认填写的信息无误后提交。`);
+          if (!ok) {
+            setCloudStatus("已取消提交。");
+            return;
+          }
+        }
+        setCloudStatus("正在合并保存到总台账……");
+
+        let lastError = null;
+        for (let attempt = 1; attempt <= 3; attempt++) {
+          try {
+            const remote = await getRemoteFile(config);
+            const remoteRules = normalizeRules(remote.data.rules || []);
+            const remoteSubmissions = Array.isArray(remote.data.submissions) ? remote.data.submissions : [];
+            const localRulesForMerge = markSubmittedRules(rules, pendingRules, submittedBy, submittedAt);
+            const mergedRules = mergeRules(remoteRules, localRulesForMerge);
+            const submission = {
+              id: "submit_" + hashString([getLabKey(), submittedBy, submittedAt, submitCount].join("|")),
+              labKey: getLabKey(),
+              labName: getLabName(),
+              room: getLab().room,
+              submittedBy,
+              submittedAt,
+              submittedAtText,
+              ruleCount: submitCount,
+              ruleIds: submitRules.map(rule => rule.id)
+            };
+            const payload = {
+              version: 1,
+              labKey: getLabKey(),
+              labName: getLabName(),
+              room: getLab().room,
+              updatedAt: submittedAt,
+              updatedBy: submittedBy,
+              submissions: [...remoteSubmissions, submission].slice(-200),
+              rules: mergedRules
+            };
+            const commitMessage = `提交${getLab().name}(${getLab().room})台账｜提交人：${submittedBy}｜提交时间：${submittedAtText}｜规则${submitCount}条`;
+            await putRemoteFile(config, payload, remote.sha, { message: commitMessage });
+            rules = mergedRules;
+            rulesByLab[getLabKey()] = rules;
+            pendingRuleIdsByLab[getLabKey()].clear();
+            renderAll();
+            setCloudStatus(`已保存到总台账：${rules.length} 条课程规则。本次提交人：${submittedBy}，提交时间：${submittedAtText}。`, "ok");
+            if (showAlert) alert("已合并保存到总台账。");
+            return;
+          } catch (error) {
+            lastError = error;
+            if (error.message === "CONFLICT" && attempt < 3) {
+              setCloudStatus(`总台账刚被更新，正在第 ${attempt + 1} 次重新合并……`);
+              await sleep(600);
+              continue;
+            }
+            throw error;
+          }
+        }
+        throw lastError;
+      } catch (error) {
+        const message = error.message === "CONFLICT" ? "保存冲突：请先从总台账读取，再重新保存。" : (error.message || String(error));
+        setCloudStatus(message, "err");
+      }
+    }
+
+    function getPendingRules() {
+      const set = pendingRuleIdsByLab[getLabKey()] || new Set();
+      return rules.filter(rule => set.has(rule.id));
+    }
+
+    function getSubmitterNames(ruleList) {
+      const names = Array.from(new Set((ruleList || [])
+        .map(rule => String(rule.teacher || rule.signName || "").trim())
+        .filter(Boolean)));
+      if (!names.length) return "未填写";
+      return names.join("、");
+    }
+
+    function markSubmittedRules(allRules, pendingRules, submittedBy, submittedAt) {
+      const pendingSet = new Set((pendingRules || []).map(rule => rule.id));
+      const shouldMarkAll = pendingSet.size === 0;
+      return normalizeRules(allRules).map(rule => {
+        if (shouldMarkAll || pendingSet.has(rule.id)) {
+          return { ...rule, submittedBy, submittedAt };
+        }
+        return rule;
+      });
+    }
+
+    function formatDateTimeLocal(date) {
+      const d = date instanceof Date ? date : new Date(date);
+      const y = d.getFullYear();
+      const m = String(d.getMonth() + 1).padStart(2, "0");
+      const day = String(d.getDate()).padStart(2, "0");
+      const h = String(d.getHours()).padStart(2, "0");
+      const min = String(d.getMinutes()).padStart(2, "0");
+      const sec = String(d.getSeconds()).padStart(2, "0");
+      return `${y}-${m}-${day} ${h}:${min}:${sec}`;
+    }
+
+    function mergeRules(remoteRules, localRules) {
+      const map = new Map();
+      normalizeRules(remoteRules).forEach(rule => map.set(ruleKey(rule), rule));
+      normalizeRules(localRules).forEach(rule => map.set(ruleKey(rule), rule));
+      return Array.from(map.values()).sort((a, b) => {
+        const x = [a.term, a.teacher, a.course, a.className, a.periods, a.createdAt || ""].join("|");
+        const y = [b.term, b.teacher, b.course, b.className, b.periods, b.createdAt || ""].join("|");
+        return x.localeCompare(y, "zh-CN");
+      });
+    }
+
+    function ruleKey(rule) {
+      return rule.id || hashString([rule.labKey, rule.term, rule.teacher, rule.course, rule.className, rule.periods, rule.weekdays.join("."), rule.weeks.join(".")].join("|"));
+    }
+
+    function makeRuleId(rule) {
+      const core = [rule.labKey, rule.term, rule.teacher, rule.course, rule.className, rule.periods, rule.weekdays.join("."), rule.weeks.join(".")].join("|");
+      return "rule_" + hashString(core) + "_" + Date.now().toString(36);
+    }
+
+    function hashString(str) {
+      let hash = 2166136261;
+      for (let i = 0; i < str.length; i++) {
+        hash ^= str.charCodeAt(i);
+        hash += (hash << 1) + (hash << 4) + (hash << 7) + (hash << 8) + (hash << 24);
+      }
+      return (hash >>> 0).toString(36);
+    }
+
+    function addDays(dateString, days) {
+      const date = new Date(dateString + "T00:00:00");
+      date.setDate(date.getDate() + days);
+      return date;
+    }
+
+    function formatDate(date) {
+      return date.getFullYear() + "-" + String(date.getMonth() + 1).padStart(2, "0") + "-" + String(date.getDate()).padStart(2, "0");
+    }
+
+    function weekText(list) {
+      if (!list.length) return "";
+      const arr = [...list].sort((a, b) => a - b);
+      const parts = [];
+      let start = arr[0];
+      let prev = arr[0];
+      for (let i = 1; i <= arr.length; i++) {
+        const current = arr[i];
+        if (current === prev + 1) {
+          prev = current;
+          continue;
+        }
+        parts.push(start === prev ? `${start}` : `${start}-${prev}`);
+        start = current;
+        prev = current;
+      }
+      return parts.join(",");
+    }
+
+    function sleep(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    async function safeReadText(response) {
+      try {
+        const data = await response.json();
+        return data.message ? `- ${data.message}` : JSON.stringify(data).slice(0, 200);
+      } catch (e) {
+        try { return (await response.text()).slice(0, 200); } catch (_) { return ""; }
+      }
+    }
+
+    function utf8ToBase64(str) {
+      const bytes = new TextEncoder().encode(str);
+      let binary = "";
+      for (let i = 0; i < bytes.length; i += 32768) {
+        binary += String.fromCharCode.apply(null, bytes.subarray(i, i + 32768));
+      }
+      return btoa(binary);
+    }
+
+    function base64ToUtf8(base64) {
+      const binary = atob(base64);
+      const bytes = new Uint8Array(binary.length);
+      for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+      return new TextDecoder().decode(bytes);
+    }
+
+    function exportCsv() {
+      const headers = ["序号", "实验室", "学期", "使用日期", "星期", "使用节次", "使用班级", "课程名称", "负责教师", "设备、用电运行状态", "有无安全异常", "课后安全收尾情况", "登记人签字", "提交人", "提交时间"];
+      const data = rows.map((row, index) => [index + 1, getLabDisplayName(), row.term, row.date, row.weekday, row.periods, row.className, row.course, row.teacher, row.deviceStatus, row.safetyStatus, row.closeStatus, row.signName, row.submittedBy || "", row.submittedAt ? formatDateTimeLocal(row.submittedAt) : ""]);
+      const csv = [headers, ...data].map(row => row.map(csvCell).join(",")).join("\n");
+      downloadBlob(`${getLabDisplayName()}使用情况登记台账.csv`, "\uFEFF" + csv, "text/csv;charset=utf-8");
+    }
+
+    function downloadBlob(filename, content, type) {
+      const blob = new Blob([content], { type });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    }
+
+    function csvCell(value) {
+      return `"${String(value ?? "").replace(/"/g, '""')}"`;
+    }
+
+    function escapeHtml(value) {
+      return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    $("teacher").addEventListener("input", () => {
+      if (!signNameTouched || $("signName").value.trim() === "") {
+        $("signName").value = $("teacher").value;
+      }
+    });
+    $("signName").addEventListener("input", () => {
+      signNameTouched = $("signName").value.trim() !== "" && $("signName").value.trim() !== $("teacher").value.trim();
+    });
+
+    syncTerm();
+    syncWeekMode();
+    rules = rulesByLab[currentLabKey];
+    renderAll();
+  </script>
+</body>
+</html>
