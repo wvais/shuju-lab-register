@@ -1,7 +1,97 @@
 {
   "version": 1,
   "labName": "数聚实验室",
-  "updatedAt": "2026-05-28T15:59:21.822Z",
+  "updatedAt": "2026-05-28T16:05:35.693Z",
   "rules": [
+    {
+      "id": "rule_1n15az2_mppnsiii",
+      "labName": "数聚实验室",
+      "term": "spring2026",
+      "startDate": "2026-03-09",
+      "maxWeek": 16,
+      "teacher": "王巍",
+      "course": "Spark数据处理",
+      "className": "24级大数据1班",
+      "signName": "王巍",
+      "weekdays": [
+        3
+      ],
+      "periods": "1-2节",
+      "weekMode": "custom",
+      "weeks": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16
+      ],
+      "deviceStatus": "正常",
+      "safetyStatus": "无",
+      "closeStatus": "收尾正常",
+      "createdAt": "2026-05-28T15:39:44.442Z"
+    },
+    {
+      "id": "rule_rf402k_mppnybuv",
+      "labName": "数聚实验室",
+      "term": "spring2026",
+      "startDate": "2026-03-09",
+      "maxWeek": 16,
+      "teacher": "王巍",
+      "course": "Spark数据处理",
+      "className": "24级大数据1班",
+      "signName": "王巍",
+      "weekdays": [
+        1
+      ],
+      "periods": "5-6节",
+      "weekMode": "even",
+      "weeks": [
+        2,
+        4,
+        6,
+        8,
+        10,
+        12,
+        14,
+        16
+      ],
+      "deviceStatus": "正常",
+      "safetyStatus": "无",
+      "closeStatus": "收尾正常",
+      "createdAt": "2026-05-28T15:44:15.751Z"
+    },
+    {
+      "id": "rule_1r14y5e_mppnxocy",
+      "labName": "数聚实验室",
+      "term": "spring2026",
+      "startDate": "2026-03-09",
+      "maxWeek": 16,
+      "teacher": "王巍",
+      "course": "Spark数据处理",
+      "className": "24级大数据1班",
+      "signName": "王巍",
+      "weekdays": [
+        1
+      ],
+      "periods": "7-8节",
+      "weekMode": "custom",
+      "weeks": [
+        8
+      ],
+      "deviceStatus": "正常",
+      "safetyStatus": "无",
+      "closeStatus": "收尾正常",
+      "createdAt": "2026-05-28T15:43:45.298Z"
+    }
   ]
 }
