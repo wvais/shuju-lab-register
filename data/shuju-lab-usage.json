@@ -1,7 +1,7 @@
 {
   "version": 1,
   "labName": "数聚实验室",
-  "updatedAt": "2026-05-28T16:05:35.693Z",
+  "updatedAt": "2026-05-28T16:48:12.686Z",
   "rules": [
     {
       "id": "rule_1n15az2_mppnsiii",
@@ -92,6 +92,74 @@
       "safetyStatus": "无",
       "closeStatus": "收尾正常",
       "createdAt": "2026-05-28T15:43:45.298Z"
+    },
+    {
+      "id": "rule_1vd2y4a_mppq1v32",
+      "labName": "数聚实验室",
+      "term": "spring2026",
+      "startDate": "2026-03-09",
+      "maxWeek": 16,
+      "teacher": "詹超宁",
+      "course": "Python程序设计",
+      "className": "25级大数据1班",
+      "signName": "詹超宁",
+      "weekdays": [
+        1
+      ],
+      "periods": "3-4节",
+      "weekMode": "even",
+      "weeks": [
+        2,
+        4,
+        6,
+        8,
+        10,
+        12,
+        14,
+        16
+      ],
+      "deviceStatus": "正常",
+      "safetyStatus": "无",
+      "closeStatus": "收尾正常",
+      "createdAt": "2026-05-28T16:42:59.870Z"
+    },
+    {
+      "id": "rule_1t6x8fz_mppq2vy5",
+      "labName": "数聚实验室",
+      "term": "spring2026",
+      "startDate": "2026-03-09",
+      "maxWeek": 16,
+      "teacher": "詹超宁",
+      "course": "Python程序设计",
+      "className": "25级大数据1班",
+      "signName": "詹超宁",
+      "weekdays": [
+        5
+      ],
+      "periods": "5-6节",
+      "weekMode": "all",
+      "weeks": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16
+      ],
+      "deviceStatus": "正常",
+      "safetyStatus": "无",
+      "closeStatus": "收尾正常",
+      "createdAt": "2026-05-28T16:43:47.645Z"
     }
   ]
 }
