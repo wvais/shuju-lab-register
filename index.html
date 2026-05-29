@@ -234,6 +234,8 @@
 
     let rulesByLab = { shuju: [], bigdata: [] };
     let pendingRuleIdsByLab = { shuju: new Set(), bigdata: new Set() };
+    // 记录“从总台账读取后被删除”的远程规则。保存时会从远程总台账中同步删除。
+    let deletedRulesByLab = { shuju: new Map(), bigdata: new Map() };
     let rules = [];
     let rows = [];
     let currentLabKey = "shuju";
@@ -473,11 +475,17 @@
     }
 
     function renderRules() {
+      const deletedCount = getDeletedRuleSnapshots().length;
       if (!rules.length) {
-        $("ruleList").textContent = "暂无录入。";
+        $("ruleList").textContent = deletedCount
+          ? `当前页面暂无录入。已标记远程删除 ${deletedCount} 条，点击“合并保存到总台账”后生效。`
+          : "暂无录入。";
         return;
       }
-      $("ruleList").innerHTML = `<table class="records">
+      const deleteHint = deletedCount
+        ? `<div class="hint" style="color:var(--danger);margin-bottom:8px">已标记远程删除 ${deletedCount} 条，点击“合并保存到总台账”后生效。</div>`
+        : "";
+      $("ruleList").innerHTML = `${deleteHint}<table class="records">
         <thead>
           <tr>
             <th>序号</th>
@@ -514,11 +522,24 @@
     }
 
     function deleteRule(id) {
+      const pendingSet = pendingRuleIdsByLab[getLabKey()];
+      const target = rules.find(rule => rule.id === id);
+      const isPendingLocalRule = pendingSet.has(id);
+
+      if (target && !isPendingLocalRule) {
+        addDeletedRuleSnapshot(target);
+      }
+
       rules = rules.filter(rule => rule.id !== id);
-      pendingRuleIdsByLab[getLabKey()].delete(id);
+      pendingSet.delete(id);
       rulesByLab[getLabKey()] = rules;
       renderAll();
-      setPageStatus("已删除该课程规则。", "ok");
+      setPageStatus(
+        isPendingLocalRule
+          ? "已删除本次未提交的课程规则。"
+          : "已删除该课程规则，并已标记为远程删除；点击“合并保存到总台账”后生效。",
+        "ok"
+      );
     }
 
     function clearForm() {
@@ -529,13 +550,25 @@
     }
 
     function clearAll() {
-      if (!confirm(`确定清空“${getLabName()}”当前页面中的全部台账记录吗？`)) return;
+      if (!confirm(`确定清空“${getLabName()}”当前页面中的全部台账记录吗？
+
+如果这些记录来自总台账，之后点击“合并保存到总台账”会同步删除远程相应规则。`)) return;
+      const pendingSet = pendingRuleIdsByLab[getLabKey()];
+      rules.forEach(rule => {
+        if (!pendingSet.has(rule.id)) addDeletedRuleSnapshot(rule);
+      });
+      const deletedCount = getDeletedRuleSnapshots().length;
       rules = [];
       rows = [];
       rulesByLab[getLabKey()] = [];
-      pendingRuleIdsByLab[getLabKey()].clear();
+      pendingSet.clear();
       renderAll();
-      setPageStatus("已清空当前台账。", "ok");
+      setPageStatus(
+        deletedCount
+          ? `已清空当前台账，并已标记远程删除 ${deletedCount} 条；点击“合并保存到总台账”后生效。`
+          : "已清空当前台账。",
+        "ok"
+      );
     }
 
     function getToken() {
@@ -608,6 +641,7 @@
         rules = normalizeRules(remote.data.rules || []);
         rulesByLab[getLabKey()] = rules;
         pendingRuleIdsByLab[getLabKey()].clear();
+        clearDeletedRuleSnapshots();
         renderAll();
         setCloudStatus(`已读取总台账：${rules.length} 条课程规则。`, "ok");
       } catch (error) {
@@ -619,7 +653,10 @@
       try {
         const config = getCloudConfig();
         validateCloudConfig(config);
-        if (!rules.length) {
+        const pendingRules = getPendingRules();
+        const deletedRules = getDeletedRuleSnapshots();
+        const deleteCount = deletedRules.length;
+        if (!rules.length && !deleteCount) {
           alert("当前页面暂无课程规则，请先添加到台账。之后再合并保存到总台账。");
           return;
         }
@@ -627,13 +664,17 @@
         const submittedAtDate = new Date();
         const submittedAt = submittedAtDate.toISOString();
         const submittedAtText = formatDateTimeLocal(submittedAtDate);
-        const pendingRules = getPendingRules();
-        const submitRules = pendingRules.length ? pendingRules : rules;
-        const submittedBy = getSubmitterNames(submitRules);
+        const submitRules = pendingRules.length ? pendingRules : (deleteCount ? [] : rules);
+        const submittedBy = getSubmitterNames([...submitRules, ...deletedRules]);
         const submitCount = submitRules.length;
 
         if (showAlert) {
-          const ok = confirm(`当前填报的是${getLab().name}(${getLab().room})的课程。\n提交人：${submittedBy}\n提交时间：${submittedAtText}\n本次提交课程规则：${submitCount} 条\n请确认填写的信息无误后提交。`);
+          const ok = confirm(`当前填报的是${getLab().name}(${getLab().room})的课程。
+提交人：${submittedBy}
+提交时间：${submittedAtText}
+本次新增/更新课程规则：${submitCount} 条
+本次远程删除课程规则：${deleteCount} 条
+请确认填写的信息无误后提交。`);
           if (!ok) {
             setCloudStatus("已取消提交。");
             return;
@@ -647,10 +688,12 @@
             const remote = await getRemoteFile(config);
             const remoteRules = normalizeRules(remote.data.rules || []);
             const remoteSubmissions = Array.isArray(remote.data.submissions) ? remote.data.submissions : [];
-            const localRulesForMerge = markSubmittedRules(rules, pendingRules, submittedBy, submittedAt);
-            const mergedRules = mergeRules(remoteRules, localRulesForMerge);
+            const deletedRuleKeys = getDeletedRuleKeys();
+            const markAllWhenNoPending = pendingRules.length === 0 && deleteCount === 0;
+            const localRulesForMerge = markSubmittedRules(rules, pendingRules, submittedBy, submittedAt, markAllWhenNoPending);
+            const mergedRules = mergeRules(remoteRules, localRulesForMerge, deletedRuleKeys);
             const submission = {
-              id: "submit_" + hashString([getLabKey(), submittedBy, submittedAt, submitCount].join("|")),
+              id: "submit_" + hashString([getLabKey(), submittedBy, submittedAt, submitCount, deleteCount].join("|")),
               labKey: getLabKey(),
               labName: getLabName(),
               room: getLab().room,
@@ -658,7 +701,9 @@
               submittedAt,
               submittedAtText,
               ruleCount: submitCount,
-              ruleIds: submitRules.map(rule => rule.id)
+              ruleIds: submitRules.map(rule => rule.id),
+              deleteRuleCount: deleteCount,
+              deletedRuleKeys: Array.from(deletedRuleKeys)
             };
             const payload = {
               version: 1,
@@ -670,13 +715,14 @@
               submissions: [...remoteSubmissions, submission].slice(-200),
               rules: mergedRules
             };
-            const commitMessage = `提交${getLab().name}(${getLab().room})台账｜提交人：${submittedBy}｜提交时间：${submittedAtText}｜规则${submitCount}条`;
+            const commitMessage = `提交${getLab().name}(${getLab().room})台账｜提交人：${submittedBy}｜提交时间：${submittedAtText}｜新增更新${submitCount}条｜删除${deleteCount}条`;
             await putRemoteFile(config, payload, remote.sha, { message: commitMessage });
             rules = mergedRules;
             rulesByLab[getLabKey()] = rules;
             pendingRuleIdsByLab[getLabKey()].clear();
+            clearDeletedRuleSnapshots();
             renderAll();
-            setCloudStatus(`已保存到总台账：${rules.length} 条课程规则。本次提交人：${submittedBy}，提交时间：${submittedAtText}。`, "ok");
+            setCloudStatus(`已保存到总台账：${rules.length} 条课程规则。本次新增/更新 ${submitCount} 条，远程删除 ${deleteCount} 条。提交人：${submittedBy}，提交时间：${submittedAtText}。`, "ok");
             if (showAlert) alert("已合并保存到总台账。");
             return;
           } catch (error) {
@@ -701,6 +747,48 @@
       return rules.filter(rule => set.has(rule.id));
     }
 
+    function getDeletedRuleMap() {
+      return deletedRulesByLab[getLabKey()] || new Map();
+    }
+
+    function getDeletedRuleSnapshots() {
+      return Array.from(getDeletedRuleMap().values());
+    }
+
+    function clearDeletedRuleSnapshots() {
+      getDeletedRuleMap().clear();
+    }
+
+    function addDeletedRuleSnapshot(rule) {
+      if (!rule) return;
+      getDeletedRuleMap().set(rule.id || ruleContentKey(rule), { ...rule });
+    }
+
+    function getRuleDeleteKeys(rule) {
+      const keys = [];
+      if (rule.id) keys.push(`id:${rule.id}`);
+      keys.push(`content:${ruleContentKey(rule)}`);
+      return keys;
+    }
+
+    function getDeletedRuleKeys() {
+      const keys = new Set();
+      getDeletedRuleSnapshots().forEach(rule => {
+        getRuleDeleteKeys(rule).forEach(key => keys.add(key));
+      });
+      return keys;
+    }
+
+    function shouldDeleteRemoteRule(rule, deletedRuleKeys) {
+      return getRuleDeleteKeys(rule).some(key => deletedRuleKeys.has(key));
+    }
+
+    function ruleContentKey(rule) {
+      const weekdays = (rule.weekdays || []).map(Number).sort((a, b) => a - b).join(".");
+      const weeks = (rule.weeks || []).map(Number).sort((a, b) => a - b).join(".");
+      return hashString([rule.labKey, rule.term, rule.teacher, rule.course, rule.className, rule.periods, weekdays, weeks].join("|"));
+    }
+
     function getSubmitterNames(ruleList) {
       const names = Array.from(new Set((ruleList || [])
         .map(rule => String(rule.teacher || rule.signName || "").trim())
@@ -709,9 +797,9 @@
       return names.join("、");
     }
 
-    function markSubmittedRules(allRules, pendingRules, submittedBy, submittedAt) {
+    function markSubmittedRules(allRules, pendingRules, submittedBy, submittedAt, markAllWhenNoPending = true) {
       const pendingSet = new Set((pendingRules || []).map(rule => rule.id));
-      const shouldMarkAll = pendingSet.size === 0;
+      const shouldMarkAll = markAllWhenNoPending && pendingSet.size === 0;
       return normalizeRules(allRules).map(rule => {
         if (shouldMarkAll || pendingSet.has(rule.id)) {
           return { ...rule, submittedBy, submittedAt };
@@ -731,9 +819,12 @@
       return `${y}-${m}-${day} ${h}:${min}:${sec}`;
     }
 
-    function mergeRules(remoteRules, localRules) {
+    function mergeRules(remoteRules, localRules, deletedRuleKeys = new Set()) {
+      const deleteKeys = deletedRuleKeys instanceof Set ? deletedRuleKeys : new Set(deletedRuleKeys || []);
       const map = new Map();
-      normalizeRules(remoteRules).forEach(rule => map.set(ruleKey(rule), rule));
+      normalizeRules(remoteRules).forEach(rule => {
+        if (!shouldDeleteRemoteRule(rule, deleteKeys)) map.set(ruleKey(rule), rule);
+      });
       normalizeRules(localRules).forEach(rule => map.set(ruleKey(rule), rule));
       return Array.from(map.values()).sort((a, b) => {
         const x = [a.term, a.teacher, a.course, a.className, a.periods, a.createdAt || ""].join("|");
