@@ -3,7 +3,7 @@
   "labKey": "shuju",
   "labName": "数聚实验室",
   "room": "308",
-  "updatedAt": "2026-05-29T05:36:37.152Z",
+  "updatedAt": "2026-05-29T10:06:30.498Z",
   "updatedBy": "张雅惠",
   "submissions": [
     {
@@ -162,6 +162,23 @@
       "ruleIds": [
         "rule_14j09xs_mpqho2ku",
         "rule_w0mlm1_mpqholsm"
+      ],
+      "deleteRuleCount": 0,
+      "deletedRuleKeys": []
+    },
+    {
+      "id": "submit_1fcbk61",
+      "labKey": "shuju",
+      "labName": "数聚实验室",
+      "room": "308",
+      "submittedBy": "张雅惠",
+      "submittedAt": "2026-05-29T10:06:30.498Z",
+      "submittedAtText": "2026-05-29 18:06:30",
+      "ruleCount": 3,
+      "ruleIds": [
+        "rule_1ic0nd5_mpqrayu1",
+        "rule_dhnqh5_mpqrbdfw",
+        "rule_1uik1kg_mpqrbh1i"
       ],
       "deleteRuleCount": 0,
       "deletedRuleKeys": []
@@ -1186,6 +1203,84 @@
       "createdAt": "2026-05-29T05:36:30.550Z",
       "submittedBy": "张雅惠",
       "submittedAt": "2026-05-29T05:36:37.152Z"
+    },
+    {
+      "id": "rule_1ic0nd5_mpqrayu1",
+      "labKey": "shuju",
+      "labName": "数聚实验室",
+      "term": "25-26-2",
+      "startDate": "2026-03-09",
+      "maxWeek": 16,
+      "teacher": "张雅惠",
+      "course": "机器学习",
+      "className": "23级大数据1班",
+      "signName": "张雅惠",
+      "weekdays": [
+        5
+      ],
+      "periods": "3-4节",
+      "weekMode": "custom",
+      "weeks": [
+        14
+      ],
+      "deviceStatus": "正常",
+      "safetyStatus": "无",
+      "closeStatus": "正常",
+      "createdAt": "2026-05-29T10:05:50.420Z",
+      "submittedBy": "张雅惠",
+      "submittedAt": "2026-05-29T10:06:30.498Z"
+    },
+    {
+      "id": "rule_dhnqh5_mpqrbdfw",
+      "labKey": "shuju",
+      "labName": "数聚实验室",
+      "term": "25-26-2",
+      "startDate": "2026-03-09",
+      "maxWeek": 16,
+      "teacher": "张雅惠",
+      "course": "机器学习",
+      "className": "23级大数据1班",
+      "signName": "张雅惠",
+      "weekdays": [
+        5
+      ],
+      "periods": "7-8节",
+      "weekMode": "custom",
+      "weeks": [
+        14
+      ],
+      "deviceStatus": "正常",
+      "safetyStatus": "无",
+      "closeStatus": "正常",
+      "createdAt": "2026-05-29T10:06:09.356Z",
+      "submittedBy": "张雅惠",
+      "submittedAt": "2026-05-29T10:06:30.498Z"
+    },
+    {
+      "id": "rule_1uik1kg_mpqrbh1i",
+      "labKey": "shuju",
+      "labName": "数聚实验室",
+      "term": "25-26-2",
+      "startDate": "2026-03-09",
+      "maxWeek": 16,
+      "teacher": "张雅惠",
+      "course": "机器学习",
+      "className": "23级大数据1班",
+      "signName": "张雅惠",
+      "weekdays": [
+        5
+      ],
+      "periods": "9-10节",
+      "weekMode": "custom",
+      "weeks": [
+        14
+      ],
+      "deviceStatus": "正常",
+      "safetyStatus": "无",
+      "closeStatus": "正常",
+      "createdAt": "2026-05-29T10:06:14.022Z",
+      "submittedBy": "张雅惠",
+      "submittedAt": "2026-05-29T10:06:30.498Z"
     }
   ]
 }
