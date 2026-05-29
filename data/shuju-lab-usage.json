@@ -3,7 +3,7 @@
   "labKey": "shuju",
   "labName": "数聚实验室",
   "room": "308",
-  "updatedAt": "2026-05-29T05:33:35.154Z",
+  "updatedAt": "2026-05-29T05:36:37.152Z",
   "updatedBy": "张雅惠",
   "submissions": [
     {
@@ -146,6 +146,22 @@
       "ruleIds": [
         "rule_1bvcup3_mpqh5yg2",
         "rule_1vpe5f_mpqhj6vt"
+      ],
+      "deleteRuleCount": 0,
+      "deletedRuleKeys": []
+    },
+    {
+      "id": "submit_1xubgkb",
+      "labKey": "shuju",
+      "labName": "数聚实验室",
+      "room": "308",
+      "submittedBy": "张雅惠",
+      "submittedAt": "2026-05-29T05:36:37.152Z",
+      "submittedAtText": "2026-05-29 13:36:37",
+      "ruleCount": 2,
+      "ruleIds": [
+        "rule_14j09xs_mpqho2ku",
+        "rule_w0mlm1_mpqholsm"
       ],
       "deleteRuleCount": 0,
       "deletedRuleKeys": []
@@ -1092,6 +1108,84 @@
       "createdAt": "2026-05-29T05:32:17.944Z",
       "submittedBy": "张雅惠",
       "submittedAt": "2026-05-29T05:33:35.154Z"
+    },
+    {
+      "id": "rule_14j09xs_mpqho2ku",
+      "labKey": "shuju",
+      "labName": "数聚实验室",
+      "term": "25-26-2",
+      "startDate": "2026-03-09",
+      "maxWeek": 16,
+      "teacher": "张雅惠",
+      "course": "机器学习",
+      "className": "23级大数据1班",
+      "signName": "张雅惠",
+      "weekdays": [
+        1
+      ],
+      "periods": "1-2节",
+      "weekMode": "custom",
+      "weeks": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        12,
+        13,
+        14,
+        15,
+        16
+      ],
+      "deviceStatus": "正常",
+      "safetyStatus": "无",
+      "closeStatus": "正常",
+      "createdAt": "2026-05-29T05:36:05.646Z",
+      "submittedBy": "张雅惠",
+      "submittedAt": "2026-05-29T05:36:37.152Z"
+    },
+    {
+      "id": "rule_w0mlm1_mpqholsm",
+      "labKey": "shuju",
+      "labName": "数聚实验室",
+      "term": "25-26-2",
+      "startDate": "2026-03-09",
+      "maxWeek": 16,
+      "teacher": "张雅惠",
+      "course": "机器学习",
+      "className": "23级大数据1班",
+      "signName": "张雅惠",
+      "weekdays": [
+        4
+      ],
+      "periods": "3-4节",
+      "weekMode": "custom",
+      "weeks": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        12,
+        13,
+        14,
+        15,
+        16
+      ],
+      "deviceStatus": "正常",
+      "safetyStatus": "无",
+      "closeStatus": "正常",
+      "createdAt": "2026-05-29T05:36:30.550Z",
+      "submittedBy": "张雅惠",
+      "submittedAt": "2026-05-29T05:36:37.152Z"
     }
   ]
 }
