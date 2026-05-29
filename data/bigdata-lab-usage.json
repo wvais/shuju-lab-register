@@ -3,7 +3,7 @@
   "labKey": "bigdata",
   "labName": "大数据实验室",
   "room": "702",
-  "updatedAt": "2026-05-29T00:58:30.084Z",
+  "updatedAt": "2026-05-29T01:28:34.676Z",
   "updatedBy": "莫于平",
   "submissions": [
     {
@@ -119,6 +119,22 @@
         "rule_10puub2_mpq7poas",
         "rule_7zmh0b_mpq7qd2c",
         "rule_1qdkljy_mpq7qwv8"
+      ]
+    },
+    {
+      "id": "submit_4bij4m",
+      "labKey": "bigdata",
+      "labName": "大数据实验室",
+      "room": "702",
+      "submittedBy": "莫于平",
+      "submittedAt": "2026-05-29T01:28:34.676Z",
+      "submittedAtText": "2026-05-29 09:28:34",
+      "ruleCount": 4,
+      "ruleIds": [
+        "rule_yge7a8_mpq8r2m3",
+        "rule_lrml60_mpq8ruas",
+        "rule_6an2yh_mpq8sglw",
+        "rule_11ovmuo_mpq8t0kb"
       ]
     }
   ],
@@ -886,6 +902,154 @@
       "createdAt": "2026-05-29T00:39:40.437Z",
       "submittedBy": "詹超宁",
       "submittedAt": "2026-05-29T00:44:47.149Z"
+    },
+    {
+      "id": "rule_11ovmuo_mpq8t0kb",
+      "labKey": "bigdata",
+      "labName": "大数据实验室",
+      "term": "25-26-2",
+      "startDate": "2026-03-09",
+      "maxWeek": 16,
+      "teacher": "莫于平",
+      "course": "云计算原理基础",
+      "className": "23大数据1班",
+      "signName": "莫于平",
+      "weekdays": [
+        4
+      ],
+      "periods": "1-2节",
+      "weekMode": "even",
+      "weeks": [
+        2,
+        4,
+        6,
+        8,
+        10,
+        12,
+        14,
+        16
+      ],
+      "deviceStatus": "正常",
+      "safetyStatus": "无",
+      "closeStatus": "正常",
+      "createdAt": "2026-05-29T01:27:59.771Z",
+      "submittedBy": "莫于平",
+      "submittedAt": "2026-05-29T01:28:34.676Z"
+    },
+    {
+      "id": "rule_lrml60_mpq8ruas",
+      "labKey": "bigdata",
+      "labName": "大数据实验室",
+      "term": "25-26-2",
+      "startDate": "2026-03-09",
+      "maxWeek": 16,
+      "teacher": "莫于平",
+      "course": "云计算原理基础",
+      "className": "23大数据1班",
+      "signName": "莫于平",
+      "weekdays": [
+        1
+      ],
+      "periods": "3-4节",
+      "weekMode": "all",
+      "weeks": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16
+      ],
+      "deviceStatus": "正常",
+      "safetyStatus": "无",
+      "closeStatus": "正常",
+      "createdAt": "2026-05-29T01:27:04.996Z",
+      "submittedBy": "莫于平",
+      "submittedAt": "2026-05-29T01:28:34.676Z"
+    },
+    {
+      "id": "rule_yge7a8_mpq8r2m3",
+      "labKey": "bigdata",
+      "labName": "大数据实验室",
+      "term": "25-26-2",
+      "startDate": "2026-03-09",
+      "maxWeek": 16,
+      "teacher": "莫于平",
+      "course": "HTML5前端程序设计",
+      "className": "24大数据1班",
+      "signName": "莫于平",
+      "weekdays": [
+        1
+      ],
+      "periods": "1-2节",
+      "weekMode": "all",
+      "weeks": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16
+      ],
+      "deviceStatus": "正常",
+      "safetyStatus": "无",
+      "closeStatus": "正常",
+      "createdAt": "2026-05-29T01:26:29.115Z",
+      "submittedBy": "莫于平",
+      "submittedAt": "2026-05-29T01:28:34.676Z"
+    },
+    {
+      "id": "rule_6an2yh_mpq8sglw",
+      "labKey": "bigdata",
+      "labName": "大数据实验室",
+      "term": "25-26-2",
+      "startDate": "2026-03-09",
+      "maxWeek": 16,
+      "teacher": "莫于平",
+      "course": "HTML5前端程序设计",
+      "className": "24大数据1班",
+      "signName": "莫于平",
+      "weekdays": [
+        4
+      ],
+      "periods": "1-2节",
+      "weekMode": "odd",
+      "weeks": [
+        1,
+        3,
+        5,
+        7,
+        9,
+        11,
+        13,
+        15
+      ],
+      "deviceStatus": "正常",
+      "safetyStatus": "无",
+      "closeStatus": "正常",
+      "createdAt": "2026-05-29T01:27:33.908Z",
+      "submittedBy": "莫于平",
+      "submittedAt": "2026-05-29T01:28:34.676Z"
     },
     {
       "id": "rule_1f5v308_mppxw68u",
