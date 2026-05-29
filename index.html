@@ -236,6 +236,9 @@
     let pendingRuleIdsByLab = { shuju: new Set(), bigdata: new Set() };
     // 记录“从总台账读取后被删除”的远程规则。保存时会从远程总台账中同步删除。
     let deletedRulesByLab = { shuju: new Map(), bigdata: new Map() };
+    // 记录最近一次“从总台账读取/保存成功”时的远程规则快照。
+    // 保存时会用它和当前页面规则做差集，避免删除标记因页面操作丢失而无法同步远程删除。
+    let remoteBaselineRulesByLab = { shuju: [], bigdata: [] };
     let rules = [];
     let rows = [];
     let currentLabKey = "shuju";
@@ -475,7 +478,7 @@
     }
 
     function renderRules() {
-      const deletedCount = getDeletedRuleSnapshots().length;
+      const deletedCount = getEffectiveDeletedRuleSnapshots().length;
       if (!rules.length) {
         $("ruleList").textContent = deletedCount
           ? `当前页面暂无录入。已标记远程删除 ${deletedCount} 条，点击“合并保存到总台账”后生效。`
@@ -557,7 +560,7 @@
       rules.forEach(rule => {
         if (!pendingSet.has(rule.id)) addDeletedRuleSnapshot(rule);
       });
-      const deletedCount = getDeletedRuleSnapshots().length;
+      const deletedCount = getEffectiveDeletedRuleSnapshots().length;
       rules = [];
       rows = [];
       rulesByLab[getLabKey()] = [];
@@ -641,6 +644,7 @@
         rules = normalizeRules(remote.data.rules || []);
         rulesByLab[getLabKey()] = rules;
         pendingRuleIdsByLab[getLabKey()].clear();
+        setRemoteBaselineRules(rules);
         clearDeletedRuleSnapshots();
         renderAll();
         setCloudStatus(`已读取总台账：${rules.length} 条课程规则。`, "ok");
@@ -653,20 +657,26 @@
       try {
         const config = getCloudConfig();
         validateCloudConfig(config);
+
         const pendingRules = getPendingRules();
-        const deletedRules = getDeletedRuleSnapshots();
+        const deletedRules = getEffectiveDeletedRuleSnapshots();
         const deleteCount = deletedRules.length;
-        if (!rules.length && !deleteCount) {
-          alert("当前页面暂无课程规则，请先添加到台账。之后再合并保存到总台账。");
+        const submitRules = pendingRules;
+        const submitCount = submitRules.length;
+
+        if (!submitCount && !deleteCount) {
+          if (!rules.length) {
+            alert("当前页面暂无课程规则，请先添加到台账。之后再合并保存到总台账。");
+          } else {
+            alert("当前没有新增课程规则，也没有标记远程删除内容，无需保存到总台账。");
+          }
           return;
         }
 
         const submittedAtDate = new Date();
         const submittedAt = submittedAtDate.toISOString();
         const submittedAtText = formatDateTimeLocal(submittedAtDate);
-        const submitRules = pendingRules.length ? pendingRules : (deleteCount ? [] : rules);
-        const submittedBy = getSubmitterNames([...submitRules, ...deletedRules]);
-        const submitCount = submitRules.length;
+        const submittedBy = submitCount ? getSubmitterNames(submitRules) : "远程删除";
 
         if (showAlert) {
           const ok = confirm(`当前填报的是${getLab().name}(${getLab().room})的课程。
@@ -674,6 +684,8 @@
 提交时间：${submittedAtText}
 本次新增/更新课程规则：${submitCount} 条
 本次远程删除课程规则：${deleteCount} 条
+
+说明：远程删除只会删除对应规则，不会重写其他历史规则的提交人和提交时间。
 请确认填写的信息无误后提交。`);
           if (!ok) {
             setCloudStatus("已取消提交。");
@@ -688,10 +700,13 @@
             const remote = await getRemoteFile(config);
             const remoteRules = normalizeRules(remote.data.rules || []);
             const remoteSubmissions = Array.isArray(remote.data.submissions) ? remote.data.submissions : [];
-            const deletedRuleKeys = getDeletedRuleKeys();
-            const markAllWhenNoPending = pendingRules.length === 0 && deleteCount === 0;
-            const localRulesForMerge = markSubmittedRules(rules, pendingRules, submittedBy, submittedAt, markAllWhenNoPending);
+            const deletedRuleKeys = getEffectiveDeletedRuleKeys();
+
+            // 只给本次新增/更新的规则写入提交人；历史规则必须保留原来的 submittedBy/submittedAt。
+            const localRulesForMerge = markSubmittedRules(rules, pendingRules, submittedBy, submittedAt, false)
+              .filter(rule => !shouldDeleteRemoteRule(rule, deletedRuleKeys));
             const mergedRules = mergeRules(remoteRules, localRulesForMerge, deletedRuleKeys);
+
             const submission = {
               id: "submit_" + hashString([getLabKey(), submittedBy, submittedAt, submitCount, deleteCount].join("|")),
               labKey: getLabKey(),
@@ -715,14 +730,17 @@
               submissions: [...remoteSubmissions, submission].slice(-200),
               rules: mergedRules
             };
-            const commitMessage = `提交${getLab().name}(${getLab().room})台账｜提交人：${submittedBy}｜提交时间：${submittedAtText}｜新增更新${submitCount}条｜删除${deleteCount}条`;
+            const commitMessage = submitCount
+              ? `提交${getLab().name}(${getLab().room})台账｜提交人：${submittedBy}｜提交时间：${submittedAtText}｜新增更新${submitCount}条｜远程删除${deleteCount}条`
+              : `提交${getLab().name}(${getLab().room})台账｜提交人：远程删除｜提交时间：${submittedAtText}｜远程删除${deleteCount}条`;
             await putRemoteFile(config, payload, remote.sha, { message: commitMessage });
             rules = mergedRules;
             rulesByLab[getLabKey()] = rules;
             pendingRuleIdsByLab[getLabKey()].clear();
+            setRemoteBaselineRules(mergedRules);
             clearDeletedRuleSnapshots();
             renderAll();
-            setCloudStatus(`已保存到总台账：${rules.length} 条课程规则。本次新增/更新 ${submitCount} 条，远程删除 ${deleteCount} 条。提交人：${submittedBy}，提交时间：${submittedAtText}。`, "ok");
+            setCloudStatus(`已保存到总台账：${rules.length} 条课程规则。本次新增/更新 ${submitCount} 条，远程删除 ${deleteCount} 条。提交人：${submittedBy}，提交时间：${submittedAtText}。历史规则提交人未改动。`, "ok");
             if (showAlert) alert("已合并保存到总台账。");
             return;
           } catch (error) {
@@ -757,6 +775,42 @@
 
     function clearDeletedRuleSnapshots() {
       getDeletedRuleMap().clear();
+    }
+
+    function setRemoteBaselineRules(ruleList) {
+      remoteBaselineRulesByLab[getLabKey()] = normalizeRules(ruleList || []).map(rule => ({ ...rule }));
+    }
+
+    function getRemoteBaselineRules() {
+      return normalizeRules(remoteBaselineRulesByLab[getLabKey()] || []);
+    }
+
+    function ruleMatchesAnyKey(rule, keySet) {
+      return getRuleDeleteKeys(rule).some(key => keySet.has(key));
+    }
+
+    function getBaselineDeletedRuleSnapshots() {
+      const currentRules = normalizeRules(rules || []);
+      return getRemoteBaselineRules().filter(baseRule => {
+        const baseKeys = new Set(getRuleDeleteKeys(baseRule));
+        return !currentRules.some(currentRule => ruleMatchesAnyKey(currentRule, baseKeys));
+      });
+    }
+
+    function getEffectiveDeletedRuleSnapshots() {
+      const map = new Map();
+      [...getDeletedRuleSnapshots(), ...getBaselineDeletedRuleSnapshots()].forEach(rule => {
+        map.set(rule.id || ruleContentKey(rule), { ...rule });
+      });
+      return Array.from(map.values());
+    }
+
+    function getEffectiveDeletedRuleKeys() {
+      const keys = new Set();
+      getEffectiveDeletedRuleSnapshots().forEach(rule => {
+        getRuleDeleteKeys(rule).forEach(key => keys.add(key));
+      });
+      return keys;
     }
 
     function addDeletedRuleSnapshot(rule) {
