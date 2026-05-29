@@ -3,8 +3,8 @@
   "labKey": "shuju",
   "labName": "数聚实验室",
   "room": "308",
-  "updatedAt": "2026-05-28T20:38:27.257Z",
-  "updatedBy": "詹超宁",
+  "updatedAt": "2026-05-29T00:18:38.073Z",
+  "updatedBy": "杨环",
   "submissions": [
     {
       "id": "submit_14a46ly",
@@ -40,6 +40,19 @@
         "rule_185ysbg_mppyckgb",
         "rule_10w39e2_mppycpur",
         "rule_1a6hloo_mppydvpw"
+      ]
+    },
+    {
+      "id": "submit_iezzdi",
+      "labKey": "shuju",
+      "labName": "数聚实验室",
+      "room": "308",
+      "submittedBy": "杨环",
+      "submittedAt": "2026-05-29T00:18:38.073Z",
+      "submittedAtText": "2026-05-29 08:18:38",
+      "ruleCount": 1,
+      "ruleIds": [
+        "rule_x1vvy6_mpq6bkl6"
       ]
     }
   ],
@@ -383,6 +396,36 @@
       "createdAt": "2026-05-28T20:08:55.840Z",
       "submittedBy": "王巍",
       "submittedAt": "2026-05-28T20:15:34.636Z"
+    },
+    {
+      "id": "rule_x1vvy6_mpq6bkl6",
+      "labKey": "shuju",
+      "labName": "数聚实验室",
+      "term": "25-26-2",
+      "startDate": "2026-03-09",
+      "maxWeek": 16,
+      "teacher": "杨环",
+      "course": "劳动教育VI",
+      "className": "23大数据1班",
+      "signName": "杨环",
+      "weekdays": [
+        3
+      ],
+      "periods": "3-4节",
+      "weekMode": "all",
+      "weeks": [
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "deviceStatus": "正常",
+      "safetyStatus": "无",
+      "closeStatus": "正常",
+      "createdAt": "2026-05-29T00:18:26.682Z",
+      "submittedBy": "杨环",
+      "submittedAt": "2026-05-29T00:18:38.073Z"
     },
     {
       "id": "rule_wdvkjx_mppy4k6p",
