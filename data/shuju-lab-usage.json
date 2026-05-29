@@ -3,8 +3,8 @@
   "labKey": "shuju",
   "labName": "数聚实验室",
   "room": "308",
-  "updatedAt": "2026-05-29T00:18:38.073Z",
-  "updatedBy": "杨环",
+  "updatedAt": "2026-05-29T00:51:03.154Z",
+  "updatedBy": "夏英",
   "submissions": [
     {
       "id": "submit_14a46ly",
@@ -53,6 +53,24 @@
       "ruleCount": 1,
       "ruleIds": [
         "rule_x1vvy6_mpq6bkl6"
+      ]
+    },
+    {
+      "id": "submit_jb7zvh",
+      "labKey": "shuju",
+      "labName": "数聚实验室",
+      "room": "308",
+      "submittedBy": "夏英",
+      "submittedAt": "2026-05-29T00:51:03.154Z",
+      "submittedAtText": "2026-05-29 08:51:03",
+      "ruleCount": 6,
+      "ruleIds": [
+        "rule_shfwzp_mpq6ug9d",
+        "rule_12y0hw8_mpq6v55l",
+        "rule_ucfgpo_mpq70tet",
+        "rule_4avpgk_mpq714hz",
+        "rule_1e3rqlj_mpq71dyt",
+        "rule_ffwj5b_mpq71hkl"
       ]
     }
   ],
@@ -177,6 +195,190 @@
       "createdAt": "2026-05-28T20:11:09.962Z",
       "submittedBy": "王巍",
       "submittedAt": "2026-05-28T20:15:34.636Z"
+    },
+    {
+      "id": "rule_shfwzp_mpq6ug9d",
+      "labKey": "shuju",
+      "labName": "数聚实验室",
+      "term": "25-26-1",
+      "startDate": "2025-09-01",
+      "maxWeek": 16,
+      "teacher": "夏英",
+      "course": "数据可视化技术",
+      "className": "23大数据1班",
+      "signName": "夏英",
+      "weekdays": [
+        3
+      ],
+      "periods": "1-2节",
+      "weekMode": "all",
+      "weeks": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "deviceStatus": "正常",
+      "safetyStatus": "无",
+      "closeStatus": "正常",
+      "createdAt": "2026-05-29T00:33:07.537Z",
+      "submittedBy": "夏英",
+      "submittedAt": "2026-05-29T00:51:03.154Z"
+    },
+    {
+      "id": "rule_12y0hw8_mpq6v55l",
+      "labKey": "shuju",
+      "labName": "数聚实验室",
+      "term": "25-26-1",
+      "startDate": "2025-09-01",
+      "maxWeek": 16,
+      "teacher": "夏英",
+      "course": "数据可视化技术",
+      "className": "23大数据1班",
+      "signName": "夏英",
+      "weekdays": [
+        4
+      ],
+      "periods": "3-4节",
+      "weekMode": "all",
+      "weeks": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "deviceStatus": "正常",
+      "safetyStatus": "无",
+      "closeStatus": "正常",
+      "createdAt": "2026-05-29T00:33:39.801Z",
+      "submittedBy": "夏英",
+      "submittedAt": "2026-05-29T00:51:03.154Z"
+    },
+    {
+      "id": "rule_ucfgpo_mpq70tet",
+      "labKey": "shuju",
+      "labName": "数聚实验室",
+      "term": "25-26-1",
+      "startDate": "2025-09-01",
+      "maxWeek": 16,
+      "teacher": "夏英",
+      "course": "数据可视化技术课程设计",
+      "className": "23大数据1班",
+      "signName": "夏英",
+      "weekdays": [
+        3
+      ],
+      "periods": "1-2节",
+      "weekMode": "custom",
+      "weeks": [
+        16
+      ],
+      "deviceStatus": "正常",
+      "safetyStatus": "无",
+      "closeStatus": "正常",
+      "createdAt": "2026-05-29T00:38:04.517Z",
+      "submittedBy": "夏英",
+      "submittedAt": "2026-05-29T00:51:03.154Z"
+    },
+    {
+      "id": "rule_1e3rqlj_mpq71dyt",
+      "labKey": "shuju",
+      "labName": "数聚实验室",
+      "term": "25-26-1",
+      "startDate": "2025-09-01",
+      "maxWeek": 16,
+      "teacher": "夏英",
+      "course": "数据可视化技术课程设计",
+      "className": "23大数据1班",
+      "signName": "夏英",
+      "weekdays": [
+        4
+      ],
+      "periods": "1-2节",
+      "weekMode": "custom",
+      "weeks": [
+        16
+      ],
+      "deviceStatus": "正常",
+      "safetyStatus": "无",
+      "closeStatus": "正常",
+      "createdAt": "2026-05-29T00:38:31.157Z",
+      "submittedBy": "夏英",
+      "submittedAt": "2026-05-29T00:51:03.154Z"
+    },
+    {
+      "id": "rule_4avpgk_mpq714hz",
+      "labKey": "shuju",
+      "labName": "数聚实验室",
+      "term": "25-26-1",
+      "startDate": "2025-09-01",
+      "maxWeek": 16,
+      "teacher": "夏英",
+      "course": "数据可视化技术课程设计",
+      "className": "23大数据1班",
+      "signName": "夏英",
+      "weekdays": [
+        3
+      ],
+      "periods": "3-4节",
+      "weekMode": "custom",
+      "weeks": [
+        16
+      ],
+      "deviceStatus": "正常",
+      "safetyStatus": "无",
+      "closeStatus": "正常",
+      "createdAt": "2026-05-29T00:38:18.887Z",
+      "submittedBy": "夏英",
+      "submittedAt": "2026-05-29T00:51:03.154Z"
+    },
+    {
+      "id": "rule_ffwj5b_mpq71hkl",
+      "labKey": "shuju",
+      "labName": "数聚实验室",
+      "term": "25-26-1",
+      "startDate": "2025-09-01",
+      "maxWeek": 16,
+      "teacher": "夏英",
+      "course": "数据可视化技术课程设计",
+      "className": "23大数据1班",
+      "signName": "夏英",
+      "weekdays": [
+        4
+      ],
+      "periods": "3-4节",
+      "weekMode": "custom",
+      "weeks": [
+        16
+      ],
+      "deviceStatus": "正常",
+      "safetyStatus": "无",
+      "closeStatus": "正常",
+      "createdAt": "2026-05-29T00:38:35.829Z",
+      "submittedBy": "夏英",
+      "submittedAt": "2026-05-29T00:51:03.154Z"
     },
     {
       "id": "rule_1a6hloo_mppydvpw",
