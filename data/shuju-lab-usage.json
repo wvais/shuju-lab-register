@@ -3,8 +3,8 @@
   "labKey": "shuju",
   "labName": "数聚实验室",
   "room": "308",
-  "updatedAt": "2026-05-29T04:46:38.225Z",
-  "updatedBy": "詹超宁",
+  "updatedAt": "2026-05-29T05:20:32.489Z",
+  "updatedBy": "张雅惠",
   "submissions": [
     {
       "id": "submit_14a46ly",
@@ -103,88 +103,37 @@
         "rule_15pp3av_mpqfumyx",
         "rule_k79hz3_mpqfvl0p"
       ]
+    },
+    {
+      "id": "submit_136l8vt",
+      "labKey": "shuju",
+      "labName": "数聚实验室",
+      "room": "308",
+      "submittedBy": "张雅惠",
+      "submittedAt": "2026-05-29T05:20:32.489Z",
+      "submittedAtText": "2026-05-29 13:20:32",
+      "ruleCount": 1,
+      "ruleIds": [
+        "rule_kndl1_mpqh3sti"
+      ],
+      "deleteRuleCount": 0,
+      "deletedRuleKeys": []
     }
   ],
   "rules": [
     {
-      "id": "rule_16tjpz2_mpq7hfyc",
+      "id": "rule_10092p8_mppxe7jh",
       "labKey": "shuju",
       "labName": "数聚实验室",
-      "term": "25-26-1",
-      "startDate": "2025-09-01",
+      "term": "25-26-2",
+      "startDate": "2026-03-09",
       "maxWeek": 16,
-      "teacher": "莫于平",
-      "course": "网页设计与制作",
-      "className": "23电子商务3班",
-      "signName": "莫于平",
-      "weekdays": [
-        5
-      ],
-      "periods": "9-10节",
-      "weekMode": "custom",
-      "weeks": [
-        6
-      ],
-      "deviceStatus": "正常",
-      "safetyStatus": "无",
-      "closeStatus": "正常",
-      "createdAt": "2026-05-29T00:51:00.228Z",
-      "submittedBy": "莫于平",
-      "submittedAt": "2026-05-29T00:51:10.380Z"
-    },
-    {
-      "id": "rule_1loxieo_mpq6mqzw",
-      "labKey": "shuju",
-      "labName": "数聚实验室",
-      "term": "25-26-1",
-      "startDate": "2025-09-01",
-      "maxWeek": 16,
-      "teacher": "莫于平",
-      "course": "NoSQL数据库技术与应用",
-      "className": "23大数据1班",
-      "signName": "莫于平",
+      "teacher": "王巍",
+      "course": "Spark数据处理",
+      "className": "23级大数据1班",
+      "signName": "王巍",
       "weekdays": [
         1
-      ],
-      "periods": "5-6节",
-      "weekMode": "all",
-      "weeks": [
-        1,
-        2,
-        3,
-        4,
-        5,
-        6,
-        7,
-        8,
-        9,
-        10,
-        11,
-        12,
-        13,
-        14,
-        15
-      ],
-      "deviceStatus": "正常",
-      "safetyStatus": "无",
-      "closeStatus": "正常",
-      "createdAt": "2026-05-29T00:27:08.204Z",
-      "submittedBy": "莫于平",
-      "submittedAt": "2026-05-29T00:51:10.380Z"
-    },
-    {
-      "id": "rule_9rry3h_mpq73l7w",
-      "labKey": "shuju",
-      "labName": "数聚实验室",
-      "term": "25-26-1",
-      "startDate": "2025-09-01",
-      "maxWeek": 16,
-      "teacher": "莫于平",
-      "course": "NoSQL数据库技术与应用",
-      "className": "23大数据1班",
-      "signName": "莫于平",
-      "weekdays": [
-        3
       ],
       "periods": "5-6节",
       "weekMode": "even",
@@ -195,14 +144,107 @@
         8,
         10,
         12,
-        14
+        14,
+        16
       ],
       "deviceStatus": "正常",
       "safetyStatus": "无",
       "closeStatus": "正常",
-      "createdAt": "2026-05-29T00:40:13.868Z",
-      "submittedBy": "莫于平",
-      "submittedAt": "2026-05-29T00:51:10.380Z"
+      "createdAt": "2026-05-28T20:08:33.197Z",
+      "submittedBy": "王巍",
+      "submittedAt": "2026-05-28T20:15:34.636Z"
+    },
+    {
+      "id": "rule_vuu82a_mppxep0g",
+      "labKey": "shuju",
+      "labName": "数聚实验室",
+      "term": "25-26-2",
+      "startDate": "2026-03-09",
+      "maxWeek": 16,
+      "teacher": "王巍",
+      "course": "Spark数据处理",
+      "className": "23级大数据1班",
+      "signName": "王巍",
+      "weekdays": [
+        1
+      ],
+      "periods": "7-8节",
+      "weekMode": "custom",
+      "weeks": [
+        8
+      ],
+      "deviceStatus": "正常",
+      "safetyStatus": "无",
+      "closeStatus": "正常",
+      "createdAt": "2026-05-28T20:08:55.840Z",
+      "submittedBy": "王巍",
+      "submittedAt": "2026-05-28T20:15:34.636Z"
+    },
+    {
+      "id": "rule_cdajge_mppxfjou",
+      "labKey": "shuju",
+      "labName": "数聚实验室",
+      "term": "25-26-2",
+      "startDate": "2026-03-09",
+      "maxWeek": 16,
+      "teacher": "王巍",
+      "course": "Spark数据处理",
+      "className": "23级大数据1班",
+      "signName": "王巍",
+      "weekdays": [
+        3
+      ],
+      "periods": "1-2节",
+      "weekMode": "custom",
+      "weeks": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16
+      ],
+      "deviceStatus": "正常",
+      "safetyStatus": "无",
+      "closeStatus": "正常",
+      "createdAt": "2026-05-28T20:09:35.598Z",
+      "submittedBy": "王巍",
+      "submittedAt": "2026-05-28T20:15:34.636Z"
+    },
+    {
+      "id": "rule_ig9coq_mppxhki2",
+      "labKey": "shuju",
+      "labName": "数聚实验室",
+      "term": "25-26-1",
+      "startDate": "2025-09-01",
+      "maxWeek": 16,
+      "teacher": "王巍",
+      "course": "Python程序设计",
+      "className": "23电商2班",
+      "signName": "王巍",
+      "weekdays": [
+        1
+      ],
+      "periods": "9-10节",
+      "weekMode": "custom",
+      "weeks": [
+        11
+      ],
+      "deviceStatus": "正常",
+      "safetyStatus": "无",
+      "closeStatus": "正常",
+      "createdAt": "2026-05-28T20:11:09.962Z",
+      "submittedBy": "王巍",
+      "submittedAt": "2026-05-28T20:15:34.636Z"
     },
     {
       "id": "rule_zvea7u_mppxjiao",
@@ -244,6 +286,32 @@
       "submittedAt": "2026-05-28T20:15:34.636Z"
     },
     {
+      "id": "rule_zrh3gv_mppxjw06",
+      "labKey": "shuju",
+      "labName": "数聚实验室",
+      "term": "25-26-1",
+      "startDate": "2025-09-01",
+      "maxWeek": 16,
+      "teacher": "王巍",
+      "course": "系统运维",
+      "className": "23级大数据1班",
+      "signName": "王巍",
+      "weekdays": [
+        4
+      ],
+      "periods": "5-6节",
+      "weekMode": "custom",
+      "weeks": [
+        13
+      ],
+      "deviceStatus": "正常",
+      "safetyStatus": "无",
+      "closeStatus": "正常",
+      "createdAt": "2026-05-28T20:12:58.182Z",
+      "submittedBy": "王巍",
+      "submittedAt": "2026-05-28T20:15:34.636Z"
+    },
+    {
       "id": "rule_1y2wd49_mppxkfzu",
       "labKey": "shuju",
       "labName": "数聚实验室",
@@ -274,56 +342,228 @@
       "submittedAt": "2026-05-28T20:15:34.636Z"
     },
     {
-      "id": "rule_zrh3gv_mppxjw06",
+      "id": "rule_wdvkjx_mppy4k6p",
+      "labKey": "shuju",
+      "labName": "数聚实验室",
+      "term": "25-26-2",
+      "startDate": "2026-03-09",
+      "maxWeek": 16,
+      "teacher": "詹超宁",
+      "course": "Python程序设计",
+      "className": "25级大数据1班",
+      "signName": "詹超宁",
+      "weekdays": [
+        1
+      ],
+      "periods": "3-4节",
+      "weekMode": "even",
+      "weeks": [
+        2,
+        4,
+        6,
+        8,
+        10,
+        12,
+        14,
+        16
+      ],
+      "deviceStatus": "正常",
+      "safetyStatus": "无",
+      "closeStatus": "正常",
+      "createdAt": "2026-05-28T20:29:02.641Z",
+      "submittedBy": "詹超宁",
+      "submittedAt": "2026-05-28T20:38:27.257Z"
+    },
+    {
+      "id": "rule_1v7ejg6_mppy8tie",
+      "labKey": "shuju",
+      "labName": "数聚实验室",
+      "term": "25-26-2",
+      "startDate": "2026-03-09",
+      "maxWeek": 16,
+      "teacher": "詹超宁",
+      "course": "Python程序设计",
+      "className": "25级大数据1班",
+      "signName": "詹超宁",
+      "weekdays": [
+        5
+      ],
+      "periods": "5-6节",
+      "weekMode": "all",
+      "weeks": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16
+      ],
+      "deviceStatus": "正常",
+      "safetyStatus": "无",
+      "closeStatus": "正常",
+      "createdAt": "2026-05-28T20:32:21.350Z",
+      "submittedBy": "詹超宁",
+      "submittedAt": "2026-05-28T20:38:27.257Z"
+    },
+    {
+      "id": "rule_185ysbg_mppyckgb",
       "labKey": "shuju",
       "labName": "数聚实验室",
       "term": "25-26-1",
       "startDate": "2025-09-01",
       "maxWeek": 16,
-      "teacher": "王巍",
-      "course": "系统运维",
+      "teacher": "詹超宁",
+      "course": "网络爬虫技术与应用",
       "className": "23级大数据1班",
-      "signName": "王巍",
+      "signName": "詹超宁",
       "weekdays": [
-        4
+        3
+      ],
+      "periods": "3-4节",
+      "weekMode": "custom",
+      "weeks": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "deviceStatus": "正常",
+      "safetyStatus": "无",
+      "closeStatus": "正常",
+      "createdAt": "2026-05-28T20:35:16.235Z",
+      "submittedBy": "詹超宁",
+      "submittedAt": "2026-05-28T20:38:27.257Z"
+    },
+    {
+      "id": "rule_10w39e2_mppycpur",
+      "labKey": "shuju",
+      "labName": "数聚实验室",
+      "term": "25-26-1",
+      "startDate": "2025-09-01",
+      "maxWeek": 16,
+      "teacher": "詹超宁",
+      "course": "网络爬虫技术与应用",
+      "className": "23级大数据1班",
+      "signName": "詹超宁",
+      "weekdays": [
+        5
       ],
       "periods": "5-6节",
       "weekMode": "custom",
       "weeks": [
-        13
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
       ],
       "deviceStatus": "正常",
       "safetyStatus": "无",
       "closeStatus": "正常",
-      "createdAt": "2026-05-28T20:12:58.182Z",
-      "submittedBy": "王巍",
-      "submittedAt": "2026-05-28T20:15:34.636Z"
+      "createdAt": "2026-05-28T20:35:23.235Z",
+      "submittedBy": "詹超宁",
+      "submittedAt": "2026-05-28T20:38:27.257Z"
     },
     {
-      "id": "rule_ig9coq_mppxhki2",
+      "id": "rule_1a6hloo_mppydvpw",
       "labKey": "shuju",
       "labName": "数聚实验室",
       "term": "25-26-1",
       "startDate": "2025-09-01",
       "maxWeek": 16,
-      "teacher": "王巍",
-      "course": "Python程序设计",
-      "className": "23电商2班",
-      "signName": "王巍",
+      "teacher": "詹超宁",
+      "course": "人力资源大数据分析",
+      "className": "23级人力本科1班",
+      "signName": "詹超宁",
       "weekdays": [
-        1
+        2
       ],
-      "periods": "9-10节",
+      "periods": "1-2节",
       "weekMode": "custom",
       "weeks": [
-        11
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        14,
+        15,
+        16
       ],
       "deviceStatus": "正常",
       "safetyStatus": "无",
       "closeStatus": "正常",
-      "createdAt": "2026-05-28T20:11:09.962Z",
-      "submittedBy": "王巍",
-      "submittedAt": "2026-05-28T20:15:34.636Z"
+      "createdAt": "2026-05-28T20:36:17.492Z",
+      "submittedBy": "詹超宁",
+      "submittedAt": "2026-05-28T20:38:27.257Z"
+    },
+    {
+      "id": "rule_x1vvy6_mpq6bkl6",
+      "labKey": "shuju",
+      "labName": "数聚实验室",
+      "term": "25-26-2",
+      "startDate": "2026-03-09",
+      "maxWeek": 16,
+      "teacher": "杨环",
+      "course": "劳动教育VI",
+      "className": "23大数据1班",
+      "signName": "杨环",
+      "weekdays": [
+        3
+      ],
+      "periods": "3-4节",
+      "weekMode": "all",
+      "weeks": [
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "deviceStatus": "正常",
+      "safetyStatus": "无",
+      "closeStatus": "正常",
+      "createdAt": "2026-05-29T00:18:26.682Z",
+      "submittedBy": "杨环",
+      "submittedAt": "2026-05-29T00:18:38.073Z"
     },
     {
       "id": "rule_shfwzp_mpq6ug9d",
@@ -432,32 +672,6 @@
       "submittedAt": "2026-05-29T00:51:03.154Z"
     },
     {
-      "id": "rule_1e3rqlj_mpq71dyt",
-      "labKey": "shuju",
-      "labName": "数聚实验室",
-      "term": "25-26-1",
-      "startDate": "2025-09-01",
-      "maxWeek": 16,
-      "teacher": "夏英",
-      "course": "数据可视化技术课程设计",
-      "className": "23大数据1班",
-      "signName": "夏英",
-      "weekdays": [
-        4
-      ],
-      "periods": "1-2节",
-      "weekMode": "custom",
-      "weeks": [
-        16
-      ],
-      "deviceStatus": "正常",
-      "safetyStatus": "无",
-      "closeStatus": "正常",
-      "createdAt": "2026-05-29T00:38:31.157Z",
-      "submittedBy": "夏英",
-      "submittedAt": "2026-05-29T00:51:03.154Z"
-    },
-    {
       "id": "rule_4avpgk_mpq714hz",
       "labKey": "shuju",
       "labName": "数聚实验室",
@@ -480,6 +694,32 @@
       "safetyStatus": "无",
       "closeStatus": "正常",
       "createdAt": "2026-05-29T00:38:18.887Z",
+      "submittedBy": "夏英",
+      "submittedAt": "2026-05-29T00:51:03.154Z"
+    },
+    {
+      "id": "rule_1e3rqlj_mpq71dyt",
+      "labKey": "shuju",
+      "labName": "数聚实验室",
+      "term": "25-26-1",
+      "startDate": "2025-09-01",
+      "maxWeek": 16,
+      "teacher": "夏英",
+      "course": "数据可视化技术课程设计",
+      "className": "23大数据1班",
+      "signName": "夏英",
+      "weekdays": [
+        4
+      ],
+      "periods": "1-2节",
+      "weekMode": "custom",
+      "weeks": [
+        16
+      ],
+      "deviceStatus": "正常",
+      "safetyStatus": "无",
+      "closeStatus": "正常",
+      "createdAt": "2026-05-29T00:38:31.157Z",
       "submittedBy": "夏英",
       "submittedAt": "2026-05-29T00:51:03.154Z"
     },
@@ -510,21 +750,21 @@
       "submittedAt": "2026-05-29T00:51:03.154Z"
     },
     {
-      "id": "rule_1a6hloo_mppydvpw",
+      "id": "rule_1loxieo_mpq6mqzw",
       "labKey": "shuju",
       "labName": "数聚实验室",
       "term": "25-26-1",
       "startDate": "2025-09-01",
       "maxWeek": 16,
-      "teacher": "詹超宁",
-      "course": "人力资源大数据分析",
-      "className": "23级人力本科1班",
-      "signName": "詹超宁",
+      "teacher": "莫于平",
+      "course": "NoSQL数据库技术与应用",
+      "className": "23大数据1班",
+      "signName": "莫于平",
       "weekdays": [
-        2
+        1
       ],
-      "periods": "1-2节",
-      "weekMode": "custom",
+      "periods": "5-6节",
+      "weekMode": "all",
       "weeks": [
         1,
         2,
@@ -538,16 +778,74 @@
         10,
         11,
         12,
+        13,
         14,
-        15,
-        16
+        15
       ],
       "deviceStatus": "正常",
       "safetyStatus": "无",
       "closeStatus": "正常",
-      "createdAt": "2026-05-28T20:36:17.492Z",
-      "submittedBy": "詹超宁",
-      "submittedAt": "2026-05-28T20:38:27.257Z"
+      "createdAt": "2026-05-29T00:27:08.204Z",
+      "submittedBy": "莫于平",
+      "submittedAt": "2026-05-29T00:51:10.380Z"
+    },
+    {
+      "id": "rule_9rry3h_mpq73l7w",
+      "labKey": "shuju",
+      "labName": "数聚实验室",
+      "term": "25-26-1",
+      "startDate": "2025-09-01",
+      "maxWeek": 16,
+      "teacher": "莫于平",
+      "course": "NoSQL数据库技术与应用",
+      "className": "23大数据1班",
+      "signName": "莫于平",
+      "weekdays": [
+        3
+      ],
+      "periods": "5-6节",
+      "weekMode": "even",
+      "weeks": [
+        2,
+        4,
+        6,
+        8,
+        10,
+        12,
+        14
+      ],
+      "deviceStatus": "正常",
+      "safetyStatus": "无",
+      "closeStatus": "正常",
+      "createdAt": "2026-05-29T00:40:13.868Z",
+      "submittedBy": "莫于平",
+      "submittedAt": "2026-05-29T00:51:10.380Z"
+    },
+    {
+      "id": "rule_16tjpz2_mpq7hfyc",
+      "labKey": "shuju",
+      "labName": "数聚实验室",
+      "term": "25-26-1",
+      "startDate": "2025-09-01",
+      "maxWeek": 16,
+      "teacher": "莫于平",
+      "course": "网页设计与制作",
+      "className": "23电子商务3班",
+      "signName": "莫于平",
+      "weekdays": [
+        5
+      ],
+      "periods": "9-10节",
+      "weekMode": "custom",
+      "weeks": [
+        6
+      ],
+      "deviceStatus": "正常",
+      "safetyStatus": "无",
+      "closeStatus": "正常",
+      "createdAt": "2026-05-29T00:51:00.228Z",
+      "submittedBy": "莫于平",
+      "submittedAt": "2026-05-29T00:51:10.380Z"
     },
     {
       "id": "rule_1h3h4u_mpqfrrmp",
@@ -581,215 +879,6 @@
       "createdAt": "2026-05-29T04:42:58.849Z",
       "submittedBy": "詹超宁",
       "submittedAt": "2026-05-29T04:46:38.225Z"
-    },
-    {
-      "id": "rule_185ysbg_mppyckgb",
-      "labKey": "shuju",
-      "labName": "数聚实验室",
-      "term": "25-26-1",
-      "startDate": "2025-09-01",
-      "maxWeek": 16,
-      "teacher": "詹超宁",
-      "course": "网络爬虫技术与应用",
-      "className": "23级大数据1班",
-      "signName": "詹超宁",
-      "weekdays": [
-        3
-      ],
-      "periods": "3-4节",
-      "weekMode": "custom",
-      "weeks": [
-        1,
-        2,
-        3,
-        4,
-        5,
-        6,
-        7,
-        8,
-        9,
-        10,
-        11,
-        12,
-        13,
-        14,
-        15
-      ],
-      "deviceStatus": "正常",
-      "safetyStatus": "无",
-      "closeStatus": "正常",
-      "createdAt": "2026-05-28T20:35:16.235Z",
-      "submittedBy": "詹超宁",
-      "submittedAt": "2026-05-28T20:38:27.257Z"
-    },
-    {
-      "id": "rule_10w39e2_mppycpur",
-      "labKey": "shuju",
-      "labName": "数聚实验室",
-      "term": "25-26-1",
-      "startDate": "2025-09-01",
-      "maxWeek": 16,
-      "teacher": "詹超宁",
-      "course": "网络爬虫技术与应用",
-      "className": "23级大数据1班",
-      "signName": "詹超宁",
-      "weekdays": [
-        5
-      ],
-      "periods": "5-6节",
-      "weekMode": "custom",
-      "weeks": [
-        1,
-        2,
-        3,
-        4,
-        5,
-        6,
-        7,
-        8,
-        9,
-        10,
-        11,
-        12,
-        13,
-        14,
-        15
-      ],
-      "deviceStatus": "正常",
-      "safetyStatus": "无",
-      "closeStatus": "正常",
-      "createdAt": "2026-05-28T20:35:23.235Z",
-      "submittedBy": "詹超宁",
-      "submittedAt": "2026-05-28T20:38:27.257Z"
-    },
-    {
-      "id": "rule_cdajge_mppxfjou",
-      "labKey": "shuju",
-      "labName": "数聚实验室",
-      "term": "25-26-2",
-      "startDate": "2026-03-09",
-      "maxWeek": 16,
-      "teacher": "王巍",
-      "course": "Spark数据处理",
-      "className": "23级大数据1班",
-      "signName": "王巍",
-      "weekdays": [
-        3
-      ],
-      "periods": "1-2节",
-      "weekMode": "custom",
-      "weeks": [
-        1,
-        2,
-        3,
-        4,
-        5,
-        6,
-        8,
-        9,
-        10,
-        11,
-        12,
-        13,
-        14,
-        15,
-        16
-      ],
-      "deviceStatus": "正常",
-      "safetyStatus": "无",
-      "closeStatus": "正常",
-      "createdAt": "2026-05-28T20:09:35.598Z",
-      "submittedBy": "王巍",
-      "submittedAt": "2026-05-28T20:15:34.636Z"
-    },
-    {
-      "id": "rule_10092p8_mppxe7jh",
-      "labKey": "shuju",
-      "labName": "数聚实验室",
-      "term": "25-26-2",
-      "startDate": "2026-03-09",
-      "maxWeek": 16,
-      "teacher": "王巍",
-      "course": "Spark数据处理",
-      "className": "23级大数据1班",
-      "signName": "王巍",
-      "weekdays": [
-        1
-      ],
-      "periods": "5-6节",
-      "weekMode": "even",
-      "weeks": [
-        2,
-        4,
-        6,
-        8,
-        10,
-        12,
-        14,
-        16
-      ],
-      "deviceStatus": "正常",
-      "safetyStatus": "无",
-      "closeStatus": "正常",
-      "createdAt": "2026-05-28T20:08:33.197Z",
-      "submittedBy": "王巍",
-      "submittedAt": "2026-05-28T20:15:34.636Z"
-    },
-    {
-      "id": "rule_vuu82a_mppxep0g",
-      "labKey": "shuju",
-      "labName": "数聚实验室",
-      "term": "25-26-2",
-      "startDate": "2026-03-09",
-      "maxWeek": 16,
-      "teacher": "王巍",
-      "course": "Spark数据处理",
-      "className": "23级大数据1班",
-      "signName": "王巍",
-      "weekdays": [
-        1
-      ],
-      "periods": "7-8节",
-      "weekMode": "custom",
-      "weeks": [
-        8
-      ],
-      "deviceStatus": "正常",
-      "safetyStatus": "无",
-      "closeStatus": "正常",
-      "createdAt": "2026-05-28T20:08:55.840Z",
-      "submittedBy": "王巍",
-      "submittedAt": "2026-05-28T20:15:34.636Z"
-    },
-    {
-      "id": "rule_x1vvy6_mpq6bkl6",
-      "labKey": "shuju",
-      "labName": "数聚实验室",
-      "term": "25-26-2",
-      "startDate": "2026-03-09",
-      "maxWeek": 16,
-      "teacher": "杨环",
-      "course": "劳动教育VI",
-      "className": "23大数据1班",
-      "signName": "杨环",
-      "weekdays": [
-        3
-      ],
-      "periods": "3-4节",
-      "weekMode": "all",
-      "weeks": [
-        11,
-        12,
-        13,
-        14,
-        15
-      ],
-      "deviceStatus": "正常",
-      "safetyStatus": "无",
-      "closeStatus": "正常",
-      "createdAt": "2026-05-29T00:18:26.682Z",
-      "submittedBy": "杨环",
-      "submittedAt": "2026-05-29T00:18:38.073Z"
     },
     {
       "id": "rule_12aj2ld_mpqfu6it",
@@ -875,54 +964,21 @@
       "submittedAt": "2026-05-29T04:46:38.225Z"
     },
     {
-      "id": "rule_wdvkjx_mppy4k6p",
+      "id": "rule_kndl1_mpqh3sti",
       "labKey": "shuju",
       "labName": "数聚实验室",
-      "term": "25-26-2",
-      "startDate": "2026-03-09",
+      "term": "25-26-1",
+      "startDate": "2025-09-01",
       "maxWeek": 16,
-      "teacher": "詹超宁",
-      "course": "Python程序设计",
-      "className": "25级大数据1班",
-      "signName": "詹超宁",
+      "teacher": "张雅惠",
+      "course": "SPSS统计分析",
+      "className": "24级人力（专升本）1班",
+      "signName": "张雅惠",
       "weekdays": [
         1
       ],
-      "periods": "3-4节",
-      "weekMode": "even",
-      "weeks": [
-        2,
-        4,
-        6,
-        8,
-        10,
-        12,
-        14,
-        16
-      ],
-      "deviceStatus": "正常",
-      "safetyStatus": "无",
-      "closeStatus": "正常",
-      "createdAt": "2026-05-28T20:29:02.641Z",
-      "submittedBy": "詹超宁",
-      "submittedAt": "2026-05-28T20:38:27.257Z"
-    },
-    {
-      "id": "rule_1v7ejg6_mppy8tie",
-      "labKey": "shuju",
-      "labName": "数聚实验室",
-      "term": "25-26-2",
-      "startDate": "2026-03-09",
-      "maxWeek": 16,
-      "teacher": "詹超宁",
-      "course": "Python程序设计",
-      "className": "25级大数据1班",
-      "signName": "詹超宁",
-      "weekdays": [
-        5
-      ],
-      "periods": "5-6节",
-      "weekMode": "all",
+      "periods": "7-8节",
+      "weekMode": "custom",
       "weeks": [
         1,
         2,
@@ -934,7 +990,6 @@
         8,
         9,
         10,
-        11,
         12,
         13,
         14,
@@ -944,9 +999,9 @@
       "deviceStatus": "正常",
       "safetyStatus": "无",
       "closeStatus": "正常",
-      "createdAt": "2026-05-28T20:32:21.350Z",
-      "submittedBy": "詹超宁",
-      "submittedAt": "2026-05-28T20:38:27.257Z"
+      "createdAt": "2026-05-29T05:20:19.878Z",
+      "submittedBy": "张雅惠",
+      "submittedAt": "2026-05-29T05:20:32.489Z"
     }
   ]
 }
