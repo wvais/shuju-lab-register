@@ -488,6 +488,7 @@
       const deleteHint = deletedCount
         ? `<div class="hint" style="color:var(--danger);margin-bottom:8px">已标记远程删除 ${deletedCount} 条，点击“合并保存到总台账”后生效。</div>`
         : "";
+      const sortedRules = getRulesSortedBySubmitTime(rules);
       $("ruleList").innerHTML = `${deleteHint}<table class="records">
         <thead>
           <tr>
@@ -506,7 +507,7 @@
           </tr>
         </thead>
         <tbody>
-          ${rules.map((rule, index) => `<tr>
+          ${sortedRules.map((rule, index) => `<tr>
             <td>${index + 1}</td>
             <td>${escapeHtml(LABS[rule.labKey]?.name ? `${LABS[rule.labKey].name}（${LABS[rule.labKey].room}）` : rule.labName)}</td>
             <td>${escapeHtml(rule.term)}</td>
@@ -880,11 +881,31 @@
         if (!shouldDeleteRemoteRule(rule, deleteKeys)) map.set(ruleKey(rule), rule);
       });
       normalizeRules(localRules).forEach(rule => map.set(ruleKey(rule), rule));
-      return Array.from(map.values()).sort((a, b) => {
-        const x = [a.term, a.teacher, a.course, a.className, a.periods, a.createdAt || ""].join("|");
-        const y = [b.term, b.teacher, b.course, b.className, b.periods, b.createdAt || ""].join("|");
-        return x.localeCompare(y, "zh-CN");
-      });
+      return getRulesSortedBySubmitTime(Array.from(map.values()));
+    }
+
+    function getRulesSortedBySubmitTime(list) {
+      return normalizeRules(list).sort(compareRuleSubmitTime);
+    }
+
+    function compareRuleSubmitTime(a, b) {
+      const aSubmitted = Date.parse(a.submittedAt || "");
+      const bSubmitted = Date.parse(b.submittedAt || "");
+      const aHasSubmitted = Number.isFinite(aSubmitted);
+      const bHasSubmitted = Number.isFinite(bSubmitted);
+
+      // 已提交规则按提交时间升序：先提交在上，后提交在下。
+      if (aHasSubmitted && bHasSubmitted && aSubmitted !== bSubmitted) return aSubmitted - bSubmitted;
+      if (aHasSubmitted !== bHasSubmitted) return aHasSubmitted ? -1 : 1;
+
+      // 未提交的新规则放在已提交规则之后，并按创建时间排列。
+      const aCreated = Date.parse(a.createdAt || "");
+      const bCreated = Date.parse(b.createdAt || "");
+      if (Number.isFinite(aCreated) && Number.isFinite(bCreated) && aCreated !== bCreated) return aCreated - bCreated;
+
+      const x = [a.term, a.teacher, a.course, a.className, a.periods, a.id || ""].join("|");
+      const y = [b.term, b.teacher, b.course, b.className, b.periods, b.id || ""].join("|");
+      return x.localeCompare(y, "zh-CN");
     }
 
     function ruleKey(rule) {
