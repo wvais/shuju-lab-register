@@ -3,7 +3,7 @@
   "labKey": "bigdata",
   "labName": "大数据实验室",
   "room": "702",
-  "updatedAt": "2026-05-29T05:25:57.087Z",
+  "updatedAt": "2026-05-29T05:37:41.378Z",
   "updatedBy": "张雅惠",
   "submissions": [
     {
@@ -192,6 +192,21 @@
         "id:rule_1xey2jq_mpqh7eka",
         "content:1xey2jq"
       ]
+    },
+    {
+      "id": "submit_h5r4cz",
+      "labKey": "bigdata",
+      "labName": "大数据实验室",
+      "room": "702",
+      "submittedBy": "张雅惠",
+      "submittedAt": "2026-05-29T05:37:41.378Z",
+      "submittedAtText": "2026-05-29 13:37:41",
+      "ruleCount": 1,
+      "ruleIds": [
+        "rule_p45mf9_mpqhimcq"
+      ],
+      "deleteRuleCount": 0,
+      "deletedRuleKeys": []
     }
   ],
   "rules": [
@@ -2271,6 +2286,33 @@
       "createdAt": "2026-05-29T05:25:38.070Z",
       "submittedBy": "张雅惠",
       "submittedAt": "2026-05-29T05:25:57.087Z"
+    },
+    {
+      "id": "rule_p45mf9_mpqhimcq",
+      "labKey": "bigdata",
+      "labName": "大数据实验室",
+      "term": "25-26-1",
+      "startDate": "2025-09-01",
+      "maxWeek": 16,
+      "teacher": "张雅惠",
+      "course": "质量统计过程控制",
+      "className": "23级质管1班",
+      "signName": "张雅惠",
+      "weekdays": [
+        4,
+        5
+      ],
+      "periods": "7-8节",
+      "weekMode": "custom",
+      "weeks": [
+        7
+      ],
+      "deviceStatus": "正常",
+      "safetyStatus": "无",
+      "closeStatus": "正常",
+      "createdAt": "2026-05-29T05:31:51.338Z",
+      "submittedBy": "张雅惠",
+      "submittedAt": "2026-05-29T05:37:41.378Z"
     }
   ]
 }
