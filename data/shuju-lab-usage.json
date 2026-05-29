@@ -3,7 +3,7 @@
   "labKey": "shuju",
   "labName": "数聚实验室",
   "room": "308",
-  "updatedAt": "2026-05-29T05:22:20.325Z",
+  "updatedAt": "2026-05-29T05:33:35.154Z",
   "updatedBy": "张雅惠",
   "submissions": [
     {
@@ -130,6 +130,22 @@
       "ruleCount": 1,
       "ruleIds": [
         "rule_1bvcup3_mpqh5yg2"
+      ],
+      "deleteRuleCount": 0,
+      "deletedRuleKeys": []
+    },
+    {
+      "id": "submit_8n0dhs",
+      "labKey": "shuju",
+      "labName": "数聚实验室",
+      "room": "308",
+      "submittedBy": "张雅惠",
+      "submittedAt": "2026-05-29T05:33:35.154Z",
+      "submittedAtText": "2026-05-29 13:33:35",
+      "ruleCount": 2,
+      "ruleIds": [
+        "rule_1bvcup3_mpqh5yg2",
+        "rule_1vpe5f_mpqhj6vt"
       ],
       "deleteRuleCount": 0,
       "deletedRuleKeys": []
@@ -1049,7 +1065,33 @@
       "closeStatus": "正常",
       "createdAt": "2026-05-29T05:22:00.482Z",
       "submittedBy": "张雅惠",
-      "submittedAt": "2026-05-29T05:22:20.325Z"
+      "submittedAt": "2026-05-29T05:33:35.154Z"
+    },
+    {
+      "id": "rule_1vpe5f_mpqhj6vt",
+      "labKey": "shuju",
+      "labName": "数聚实验室",
+      "term": "25-26-1",
+      "startDate": "2025-09-01",
+      "maxWeek": 16,
+      "teacher": "张雅惠",
+      "course": "质量统计过程控制",
+      "className": "23级质管1班",
+      "signName": "张雅惠",
+      "weekdays": [
+        5
+      ],
+      "periods": "9-10节",
+      "weekMode": "custom",
+      "weeks": [
+        7
+      ],
+      "deviceStatus": "正常",
+      "safetyStatus": "无",
+      "closeStatus": "正常",
+      "createdAt": "2026-05-29T05:32:17.944Z",
+      "submittedBy": "张雅惠",
+      "submittedAt": "2026-05-29T05:33:35.154Z"
     }
   ]
 }
