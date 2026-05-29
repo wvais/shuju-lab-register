@@ -234,10 +234,10 @@
 
     let rulesByLab = { shuju: [], bigdata: [] };
     let pendingRuleIdsByLab = { shuju: new Set(), bigdata: new Set() };
-    // 记录“从总台账读取后被删除”的远程规则。保存时会从远程总台账中同步删除。
+    // 只记录用户逐条点击“删除”后产生的远程删除任务。
+    // “清空当前台账”仅清空本地页面，不产生远程删除任务，避免误删总台账。
     let deletedRulesByLab = { shuju: new Map(), bigdata: new Map() };
-    // 记录最近一次“从总台账读取/保存成功”时的远程规则快照。
-    // 保存时会用它和当前页面规则做差集，避免删除标记因页面操作丢失而无法同步远程删除。
+    // 记录最近一次“从总台账读取/保存成功”时的远程规则快照，仅作状态基准，不用于自动推断删除。
     let remoteBaselineRulesByLab = { shuju: [], bigdata: [] };
     let rules = [];
     let rows = [];
@@ -554,25 +554,21 @@
     }
 
     function clearAll() {
-      if (!confirm(`确定清空“${getLabName()}”当前页面中的全部台账记录吗？
+      if (!confirm(`确定清空“${getLabName()}”当前页面中的本地台账记录吗？
 
-如果这些记录来自总台账，之后点击“合并保存到总台账”会同步删除远程相应规则。`)) return;
+该操作只清空当前浏览器页面和本地待提交内容，不会删除总台账已有数据，也不会生成远程删除任务。
+如需删除总台账中的某条规则，请使用规则列表右侧的“删除”按钮，再点击“合并保存到总台账”。`)) return;
+
       const pendingSet = pendingRuleIdsByLab[getLabKey()];
-      rules.forEach(rule => {
-        if (!pendingSet.has(rule.id)) addDeletedRuleSnapshot(rule);
-      });
-      const deletedCount = getEffectiveDeletedRuleSnapshots().length;
       rules = [];
       rows = [];
       rulesByLab[getLabKey()] = [];
       pendingSet.clear();
+      clearDeletedRuleSnapshots();
+      setRemoteBaselineRules([]);
       renderAll();
-      setPageStatus(
-        deletedCount
-          ? `已清空当前台账，并已标记远程删除 ${deletedCount} 条；点击“合并保存到总台账”后生效。`
-          : "已清空当前台账。",
-        "ok"
-      );
+      setPageStatus("已清空当前本地台账。该操作不会删除总台账数据。", "ok");
+      setCloudStatus("已清空本地页面；如需同步新增内容，请重新添加规则后再合并保存到总台账。");
     }
 
     function getToken() {
@@ -667,7 +663,7 @@
 
         if (!submitCount && !deleteCount) {
           if (!rules.length) {
-            alert("当前页面暂无课程规则，请先添加到台账。之后再合并保存到总台账。");
+            alert("当前本地台账为空；清空本地不会影响总台账。如需新增规则，请添加后再合并保存到总台账。");
           } else {
             alert("当前没有新增课程规则，也没有标记远程删除内容，无需保存到总台账。");
           }
@@ -799,8 +795,10 @@
     }
 
     function getEffectiveDeletedRuleSnapshots() {
+      // 远程删除只接受“逐条删除”产生的显式删除标记。
+      // 不再用“远程快照 - 当前页面”自动推断删除，避免点击“清空当前台账”后误删总台账。
       const map = new Map();
-      [...getDeletedRuleSnapshots(), ...getBaselineDeletedRuleSnapshots()].forEach(rule => {
+      getDeletedRuleSnapshots().forEach(rule => {
         map.set(rule.id || ruleContentKey(rule), { ...rule });
       });
       return Array.from(map.values());
