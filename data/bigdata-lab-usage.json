@@ -3,8 +3,8 @@
   "labKey": "bigdata",
   "labName": "大数据实验室",
   "room": "702",
-  "updatedAt": "2026-05-28T20:24:14.034Z",
-  "updatedBy": "王巍",
+  "updatedAt": "2026-05-29T00:17:03.865Z",
+  "updatedBy": "杨环",
   "submissions": [
     {
       "id": "submit_1eke7vc",
@@ -24,6 +24,22 @@
         "rule_1f5v308_mppxw68u",
         "rule_9qrazc_mppxxdjx",
         "rule_1npb1ov_mppxxskn"
+      ]
+    },
+    {
+      "id": "submit_1y9of96",
+      "labKey": "bigdata",
+      "labName": "大数据实验室",
+      "room": "702",
+      "submittedBy": "杨环",
+      "submittedAt": "2026-05-29T00:17:03.865Z",
+      "submittedAtText": "2026-05-29 08:17:03",
+      "ruleCount": 4,
+      "ruleIds": [
+        "rule_14w7ast_mpq63cbu",
+        "rule_mcxtf3_mpq641vf",
+        "rule_1uj12ef_mpq64dib",
+        "rule_1w31wbr_mpq65na2"
       ]
     }
   ],
@@ -313,6 +329,143 @@
       "createdAt": "2026-05-28T20:23:46.919Z",
       "submittedBy": "王巍",
       "submittedAt": "2026-05-28T20:24:14.034Z"
+    },
+    {
+      "id": "rule_mcxtf3_mpq641vf",
+      "labKey": "bigdata",
+      "labName": "大数据实验室",
+      "term": "25-26-2",
+      "startDate": "2026-03-09",
+      "maxWeek": 16,
+      "teacher": "杨环",
+      "course": "大数据处理与分析",
+      "className": "24大数据1班",
+      "signName": "杨环",
+      "weekdays": [
+        5
+      ],
+      "periods": "1-2节",
+      "weekMode": "all",
+      "weeks": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16
+      ],
+      "deviceStatus": "正常",
+      "safetyStatus": "无",
+      "closeStatus": "正常",
+      "createdAt": "2026-05-29T00:12:35.835Z",
+      "submittedBy": "杨环",
+      "submittedAt": "2026-05-29T00:17:03.865Z"
+    },
+    {
+      "id": "rule_1uj12ef_mpq64dib",
+      "labKey": "bigdata",
+      "labName": "大数据实验室",
+      "term": "25-26-2",
+      "startDate": "2026-03-09",
+      "maxWeek": 16,
+      "teacher": "杨环",
+      "course": "大数据处理与分析",
+      "className": "24大数据1班",
+      "signName": "杨环",
+      "weekdays": [
+        5
+      ],
+      "periods": "3-4节",
+      "weekMode": "all",
+      "weeks": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16
+      ],
+      "deviceStatus": "正常",
+      "safetyStatus": "无",
+      "closeStatus": "正常",
+      "createdAt": "2026-05-29T00:12:50.915Z",
+      "submittedBy": "杨环",
+      "submittedAt": "2026-05-29T00:17:03.865Z"
+    },
+    {
+      "id": "rule_14w7ast_mpq63cbu",
+      "labKey": "bigdata",
+      "labName": "大数据实验室",
+      "term": "25-26-2",
+      "startDate": "2026-03-09",
+      "maxWeek": 16,
+      "teacher": "杨环",
+      "course": "大数据处理与分析",
+      "className": "24大数据1班",
+      "signName": "杨环",
+      "weekdays": [
+        3
+      ],
+      "periods": "5-6节",
+      "weekMode": "all",
+      "weeks": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "deviceStatus": "正常",
+      "safetyStatus": "无",
+      "closeStatus": "正常",
+      "createdAt": "2026-05-29T00:12:02.730Z",
+      "submittedBy": "杨环",
+      "submittedAt": "2026-05-29T00:17:03.865Z"
+    },
+    {
+      "id": "rule_1w31wbr_mpq65na2",
+      "labKey": "bigdata",
+      "labName": "大数据实验室",
+      "term": "25-26-2",
+      "startDate": "2026-03-09",
+      "maxWeek": 16,
+      "teacher": "杨环",
+      "course": "劳动教育VI",
+      "className": "23大数据1班",
+      "signName": "杨环",
+      "weekdays": [
+        3
+      ],
+      "periods": "3-4节",
+      "weekMode": "all",
+      "weeks": [
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "deviceStatus": "正常",
+      "safetyStatus": "无",
+      "closeStatus": "正常",
+      "createdAt": "2026-05-29T00:13:50.234Z",
+      "submittedBy": "杨环",
+      "submittedAt": "2026-05-29T00:17:03.865Z"
     }
   ]
 }
