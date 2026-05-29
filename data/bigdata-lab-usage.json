@@ -3,8 +3,8 @@
   "labKey": "bigdata",
   "labName": "大数据实验室",
   "room": "702",
-  "updatedAt": "2026-05-29T00:56:59.563Z",
-  "updatedBy": "夏英",
+  "updatedAt": "2026-05-29T00:55:30.660Z",
+  "updatedBy": "莫于平",
   "submissions": [
     {
       "id": "submit_1eke7vc",
@@ -90,6 +90,19 @@
         "rule_1lz25is_mpq74q4o",
         "rule_1mdocrv_mpq7762i",
         "rule_1xlintv_mpq78kzg"
+      ]
+    },
+    {
+      "id": "submit_1njtohl",
+      "labKey": "bigdata",
+      "labName": "大数据实验室",
+      "room": "702",
+      "submittedBy": "莫于平",
+      "submittedAt": "2026-05-29T00:55:30.660Z",
+      "submittedAtText": "2026-05-29 08:55:30",
+      "ruleCount": 1,
+      "ruleIds": [
+        "rule_1nmpmzk_mpq7n3cb"
       ]
     }
   ],
@@ -279,6 +292,32 @@
       "createdAt": "2026-05-29T00:45:59.908Z",
       "submittedBy": "莫于平",
       "submittedAt": "2026-05-29T00:48:32.916Z"
+    },
+    {
+      "id": "rule_1nmpmzk_mpq7n3cb",
+      "labKey": "bigdata",
+      "labName": "大数据实验室",
+      "term": "25-26-1",
+      "startDate": "2025-09-01",
+      "maxWeek": 16,
+      "teacher": "莫于平",
+      "course": "面向对象程序设计",
+      "className": "24级大数据1班",
+      "signName": "莫于平",
+      "weekdays": [
+        5
+      ],
+      "periods": "9-10节",
+      "weekMode": "custom",
+      "weeks": [
+        7
+      ],
+      "deviceStatus": "正常",
+      "safetyStatus": "无",
+      "closeStatus": "正常",
+      "createdAt": "2026-05-29T00:55:23.819Z",
+      "submittedBy": "莫于平",
+      "submittedAt": "2026-05-29T00:55:30.660Z"
     },
     {
       "id": "rule_18wq399_mpq764mk",
