@@ -3,8 +3,8 @@
   "labKey": "bigdata",
   "labName": "大数据实验室",
   "room": "702",
-  "updatedAt": "2026-05-29T00:17:03.865Z",
-  "updatedBy": "杨环",
+  "updatedAt": "2026-05-29T00:44:47.149Z",
+  "updatedBy": "詹超宁",
   "submissions": [
     {
       "id": "submit_1eke7vc",
@@ -40,6 +40,22 @@
         "rule_mcxtf3_mpq641vf",
         "rule_1uj12ef_mpq64dib",
         "rule_1w31wbr_mpq65na2"
+      ]
+    },
+    {
+      "id": "submit_izt9ab",
+      "labKey": "bigdata",
+      "labName": "大数据实验室",
+      "room": "702",
+      "submittedBy": "詹超宁",
+      "submittedAt": "2026-05-29T00:44:47.149Z",
+      "submittedAtText": "2026-05-29 08:44:47",
+      "ruleCount": 4,
+      "ruleIds": [
+        "rule_lsm36d_mpq72vf9",
+        "rule_trqbvf_mpq73i7a",
+        "rule_1k7qs4n_mpq75ldh",
+        "rule_1rykfpn_mpq769zp"
       ]
     }
   ],
@@ -222,6 +238,124 @@
       "createdAt": "2026-05-28T20:20:06.193Z",
       "submittedBy": "王巍",
       "submittedAt": "2026-05-28T20:24:14.034Z"
+    },
+    {
+      "id": "rule_1k7qs4n_mpq75ldh",
+      "labKey": "bigdata",
+      "labName": "大数据实验室",
+      "term": "25-26-1",
+      "startDate": "2025-09-01",
+      "maxWeek": 16,
+      "teacher": "詹超宁",
+      "course": "深度学习",
+      "className": "22级大数据1班",
+      "signName": "詹超宁",
+      "weekdays": [
+        3
+      ],
+      "periods": "9-10节",
+      "weekMode": "all",
+      "weeks": [
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16
+      ],
+      "deviceStatus": "正常",
+      "safetyStatus": "无",
+      "closeStatus": "正常",
+      "createdAt": "2026-05-29T00:41:47.381Z",
+      "submittedBy": "詹超宁",
+      "submittedAt": "2026-05-29T00:44:47.149Z"
+    },
+    {
+      "id": "rule_1rykfpn_mpq769zp",
+      "labKey": "bigdata",
+      "labName": "大数据实验室",
+      "term": "25-26-1",
+      "startDate": "2025-09-01",
+      "maxWeek": 16,
+      "teacher": "詹超宁",
+      "course": "深度学习",
+      "className": "22级大数据1班",
+      "signName": "詹超宁",
+      "weekdays": [
+        4
+      ],
+      "periods": "9-10节",
+      "weekMode": "all",
+      "weeks": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "deviceStatus": "正常",
+      "safetyStatus": "无",
+      "closeStatus": "正常",
+      "createdAt": "2026-05-29T00:42:19.285Z",
+      "submittedBy": "詹超宁",
+      "submittedAt": "2026-05-29T00:44:47.149Z"
+    },
+    {
+      "id": "rule_trqbvf_mpq73i7a",
+      "labKey": "bigdata",
+      "labName": "大数据实验室",
+      "term": "25-26-1",
+      "startDate": "2025-09-01",
+      "maxWeek": 16,
+      "teacher": "詹超宁",
+      "course": "网络爬虫技术与应用",
+      "className": "23级大数据1班",
+      "signName": "詹超宁",
+      "weekdays": [
+        5
+      ],
+      "periods": "7-8节",
+      "weekMode": "custom",
+      "weeks": [
+        6
+      ],
+      "deviceStatus": "正常",
+      "safetyStatus": "无",
+      "closeStatus": "正常",
+      "createdAt": "2026-05-29T00:40:09.958Z",
+      "submittedBy": "詹超宁",
+      "submittedAt": "2026-05-29T00:44:47.149Z"
+    },
+    {
+      "id": "rule_lsm36d_mpq72vf9",
+      "labKey": "bigdata",
+      "labName": "大数据实验室",
+      "term": "25-26-1",
+      "startDate": "2025-09-01",
+      "maxWeek": 16,
+      "teacher": "詹超宁",
+      "course": "网络爬虫技术与应用",
+      "className": "23级大数据1班",
+      "signName": "詹超宁",
+      "weekdays": [
+        3
+      ],
+      "periods": "9-10节",
+      "weekMode": "custom",
+      "weeks": [
+        5
+      ],
+      "deviceStatus": "正常",
+      "safetyStatus": "无",
+      "closeStatus": "正常",
+      "createdAt": "2026-05-29T00:39:40.437Z",
+      "submittedBy": "詹超宁",
+      "submittedAt": "2026-05-29T00:44:47.149Z"
     },
     {
       "id": "rule_1f5v308_mppxw68u",
