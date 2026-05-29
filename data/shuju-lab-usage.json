@@ -3,8 +3,8 @@
   "labKey": "shuju",
   "labName": "数聚实验室",
   "room": "308",
-  "updatedAt": "2026-05-29T00:51:03.154Z",
-  "updatedBy": "夏英",
+  "updatedAt": "2026-05-29T00:51:10.380Z",
+  "updatedBy": "莫于平",
   "submissions": [
     {
       "id": "submit_14a46ly",
@@ -72,9 +72,122 @@
         "rule_1e3rqlj_mpq71dyt",
         "rule_ffwj5b_mpq71hkl"
       ]
+    },
+    {
+      "id": "submit_z9m599",
+      "labKey": "shuju",
+      "labName": "数聚实验室",
+      "room": "308",
+      "submittedBy": "莫于平",
+      "submittedAt": "2026-05-29T00:51:10.380Z",
+      "submittedAtText": "2026-05-29 08:51:10",
+      "ruleCount": 3,
+      "ruleIds": [
+        "rule_1loxieo_mpq6mqzw",
+        "rule_9rry3h_mpq73l7w",
+        "rule_16tjpz2_mpq7hfyc"
+      ]
     }
   ],
   "rules": [
+    {
+      "id": "rule_16tjpz2_mpq7hfyc",
+      "labKey": "shuju",
+      "labName": "数聚实验室",
+      "term": "25-26-1",
+      "startDate": "2025-09-01",
+      "maxWeek": 16,
+      "teacher": "莫于平",
+      "course": "网页设计与制作",
+      "className": "23电子商务3班",
+      "signName": "莫于平",
+      "weekdays": [
+        5
+      ],
+      "periods": "9-10节",
+      "weekMode": "custom",
+      "weeks": [
+        6
+      ],
+      "deviceStatus": "正常",
+      "safetyStatus": "无",
+      "closeStatus": "正常",
+      "createdAt": "2026-05-29T00:51:00.228Z",
+      "submittedBy": "莫于平",
+      "submittedAt": "2026-05-29T00:51:10.380Z"
+    },
+    {
+      "id": "rule_1loxieo_mpq6mqzw",
+      "labKey": "shuju",
+      "labName": "数聚实验室",
+      "term": "25-26-1",
+      "startDate": "2025-09-01",
+      "maxWeek": 16,
+      "teacher": "莫于平",
+      "course": "NoSQL数据库技术与应用",
+      "className": "23大数据1班",
+      "signName": "莫于平",
+      "weekdays": [
+        1
+      ],
+      "periods": "5-6节",
+      "weekMode": "all",
+      "weeks": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "deviceStatus": "正常",
+      "safetyStatus": "无",
+      "closeStatus": "正常",
+      "createdAt": "2026-05-29T00:27:08.204Z",
+      "submittedBy": "莫于平",
+      "submittedAt": "2026-05-29T00:51:10.380Z"
+    },
+    {
+      "id": "rule_9rry3h_mpq73l7w",
+      "labKey": "shuju",
+      "labName": "数聚实验室",
+      "term": "25-26-1",
+      "startDate": "2025-09-01",
+      "maxWeek": 16,
+      "teacher": "莫于平",
+      "course": "NoSQL数据库技术与应用",
+      "className": "23大数据1班",
+      "signName": "莫于平",
+      "weekdays": [
+        3
+      ],
+      "periods": "5-6节",
+      "weekMode": "even",
+      "weeks": [
+        2,
+        4,
+        6,
+        8,
+        10,
+        12,
+        14
+      ],
+      "deviceStatus": "正常",
+      "safetyStatus": "无",
+      "closeStatus": "正常",
+      "createdAt": "2026-05-29T00:40:13.868Z",
+      "submittedBy": "莫于平",
+      "submittedAt": "2026-05-29T00:51:10.380Z"
+    },
     {
       "id": "rule_zvea7u_mppxjiao",
       "labKey": "shuju",
