@@ -3,7 +3,7 @@
   "labKey": "bigdata",
   "labName": "大数据实验室",
   "room": "702",
-  "updatedAt": "2026-05-29T05:24:06.682Z",
+  "updatedAt": "2026-05-29T05:25:57.087Z",
   "updatedBy": "张雅惠",
   "submissions": [
     {
@@ -173,6 +173,25 @@
       ],
       "deleteRuleCount": 0,
       "deletedRuleKeys": []
+    },
+    {
+      "id": "submit_1g8d5fy",
+      "labKey": "bigdata",
+      "labName": "大数据实验室",
+      "room": "702",
+      "submittedBy": "张雅惠",
+      "submittedAt": "2026-05-29T05:25:57.087Z",
+      "submittedAtText": "2026-05-29 13:25:57",
+      "ruleCount": 2,
+      "ruleIds": [
+        "rule_633ydh_mpqha4ib",
+        "rule_154lnz9_mpqhamc6"
+      ],
+      "deleteRuleCount": 1,
+      "deletedRuleKeys": [
+        "id:rule_1xey2jq_mpqh7eka",
+        "content:1xey2jq"
+      ]
     }
   ],
   "rules": [
@@ -2174,7 +2193,47 @@
       "submittedAt": "2026-05-29T05:22:20.325Z"
     },
     {
-      "id": "rule_1xey2jq_mpqh7eka",
+      "id": "rule_633ydh_mpqha4ib",
+      "labKey": "bigdata",
+      "labName": "大数据实验室",
+      "term": "25-26-1",
+      "startDate": "2025-09-01",
+      "maxWeek": 16,
+      "teacher": "张雅惠",
+      "course": "机器学习",
+      "className": "22级大数据1班",
+      "signName": "张雅惠",
+      "weekdays": [
+        3
+      ],
+      "periods": "7-8节",
+      "weekMode": "all",
+      "weeks": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "deviceStatus": "正常",
+      "safetyStatus": "无",
+      "closeStatus": "正常",
+      "createdAt": "2026-05-29T05:25:14.963Z",
+      "submittedBy": "张雅惠",
+      "submittedAt": "2026-05-29T05:25:57.087Z"
+    },
+    {
+      "id": "rule_154lnz9_mpqhamc6",
       "labKey": "bigdata",
       "labName": "大数据实验室",
       "term": "25-26-1",
@@ -2185,7 +2244,7 @@
       "className": "22级大数据1班",
       "signName": "张雅惠",
       "weekdays": [
-        2
+        3
       ],
       "periods": "5-6节",
       "weekMode": "all",
@@ -2209,9 +2268,9 @@
       "deviceStatus": "正常",
       "safetyStatus": "无",
       "closeStatus": "正常",
-      "createdAt": "2026-05-29T05:23:08.026Z",
+      "createdAt": "2026-05-29T05:25:38.070Z",
       "submittedBy": "张雅惠",
-      "submittedAt": "2026-05-29T05:24:06.682Z"
+      "submittedAt": "2026-05-29T05:25:57.087Z"
     }
   ]
 }
