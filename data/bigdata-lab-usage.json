@@ -3,8 +3,8 @@
   "labKey": "bigdata",
   "labName": "大数据实验室",
   "room": "702",
-  "updatedAt": "2026-05-29T00:48:32.916Z",
-  "updatedBy": "莫于平",
+  "updatedAt": "2026-05-29T00:56:59.563Z",
+  "updatedBy": "夏英",
   "submissions": [
     {
       "id": "submit_1eke7vc",
@@ -74,6 +74,22 @@
         "rule_18wq399_mpq764mk",
         "rule_g7odgs_mpq7a2rx",
         "rule_1im9n42_mpq7b084"
+      ]
+    },
+    {
+      "id": "submit_fdeyis",
+      "labKey": "bigdata",
+      "labName": "大数据实验室",
+      "room": "702",
+      "submittedBy": "夏英",
+      "submittedAt": "2026-05-29T00:56:59.563Z",
+      "submittedAtText": "2026-05-29 08:56:59",
+      "ruleCount": 4,
+      "ruleIds": [
+        "rule_188zvex_mpq744yz",
+        "rule_1lz25is_mpq74q4o",
+        "rule_1mdocrv_mpq7762i",
+        "rule_1xlintv_mpq78kzg"
       ]
     }
   ],
@@ -471,6 +487,86 @@
       "submittedAt": "2026-05-28T20:24:14.034Z"
     },
     {
+      "id": "rule_188zvex_mpq744yz",
+      "labKey": "bigdata",
+      "labName": "大数据实验室",
+      "term": "25-26-1",
+      "startDate": "2025-09-01",
+      "maxWeek": 16,
+      "teacher": "夏英",
+      "course": "科技论文选读",
+      "className": "22大数据1班",
+      "signName": "夏英",
+      "weekdays": [
+        3
+      ],
+      "periods": "3-4节",
+      "weekMode": "all",
+      "weeks": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "deviceStatus": "正常",
+      "safetyStatus": "无",
+      "closeStatus": "正常",
+      "createdAt": "2026-05-29T00:40:39.467Z",
+      "submittedBy": "夏英",
+      "submittedAt": "2026-05-29T00:56:59.563Z"
+    },
+    {
+      "id": "rule_1lz25is_mpq74q4o",
+      "labKey": "bigdata",
+      "labName": "大数据实验室",
+      "term": "25-26-1",
+      "startDate": "2025-09-01",
+      "maxWeek": 16,
+      "teacher": "夏英",
+      "course": "科技论文选读",
+      "className": "22大数据1班",
+      "signName": "夏英",
+      "weekdays": [
+        4
+      ],
+      "periods": "5-6节",
+      "weekMode": "all",
+      "weeks": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "deviceStatus": "正常",
+      "safetyStatus": "无",
+      "closeStatus": "正常",
+      "createdAt": "2026-05-29T00:41:06.888Z",
+      "submittedBy": "夏英",
+      "submittedAt": "2026-05-29T00:56:59.563Z"
+    },
+    {
       "id": "rule_1k7qs4n_mpq75ldh",
       "labKey": "bigdata",
       "labName": "大数据实验室",
@@ -694,6 +790,80 @@
       "createdAt": "2026-05-28T20:23:46.919Z",
       "submittedBy": "王巍",
       "submittedAt": "2026-05-28T20:24:14.034Z"
+    },
+    {
+      "id": "rule_1xlintv_mpq78kzg",
+      "labKey": "bigdata",
+      "labName": "大数据实验室",
+      "term": "25-26-2",
+      "startDate": "2026-03-09",
+      "maxWeek": 16,
+      "teacher": "夏英",
+      "course": "数据结构",
+      "className": "24大数据1班",
+      "signName": "夏英",
+      "weekdays": [
+        2
+      ],
+      "periods": "3-4节",
+      "weekMode": "all",
+      "weeks": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16
+      ],
+      "deviceStatus": "正常",
+      "safetyStatus": "无",
+      "closeStatus": "正常",
+      "createdAt": "2026-05-29T00:44:06.844Z",
+      "submittedBy": "夏英",
+      "submittedAt": "2026-05-29T00:56:59.563Z"
+    },
+    {
+      "id": "rule_1mdocrv_mpq7762i",
+      "labKey": "bigdata",
+      "labName": "大数据实验室",
+      "term": "25-26-2",
+      "startDate": "2026-03-09",
+      "maxWeek": 16,
+      "teacher": "夏英",
+      "course": "数据结构",
+      "className": "24大数据1班",
+      "signName": "夏英",
+      "weekdays": [
+        1
+      ],
+      "periods": "5-6节",
+      "weekMode": "even",
+      "weeks": [
+        2,
+        4,
+        6,
+        8,
+        10,
+        12,
+        14,
+        16
+      ],
+      "deviceStatus": "正常",
+      "safetyStatus": "无",
+      "closeStatus": "正常",
+      "createdAt": "2026-05-29T00:43:00.858Z",
+      "submittedBy": "夏英",
+      "submittedAt": "2026-05-29T00:56:59.563Z"
     },
     {
       "id": "rule_mcxtf3_mpq641vf",
